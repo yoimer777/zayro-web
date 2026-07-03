@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ZAYRO — perfumería, moda y accesorios con una propuesta urbana, cruda y premium. Fragancias originales e inspiraciones." />
+    <meta name="keywords" content="perfumes, zayro, fragancias, colombia, moda, inspiraciones" />
+    <meta name="theme-color" content="#0b0b0a" />
+    <title>ZAYRO✦ | Perfumes y estilo urbano</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" id="top">
+      <a class="brand" href="#top" aria-label="ZAYRO inicio">
+        <span>ZAYRO✦</span>
+      </a>
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="site-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Navegación principal">
+        <a href="#catalogo">PERFUMES</a>
+        <a href="#featured">COLECCIÓN</a>
+        <a href="#inspiracion">INSPIRACIÓN</a>
+        <a href="#faq">FAQ</a>
+        <a class="nav-cta" href="https://api.whatsapp.com/send/?phone=573016731498&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" rel="noreferrer">Escríbenos</a>
+      </nav>
+      <button class="cart-toggle" id="cart-toggle" aria-label="Abrir carrito" title="Abrir carrito">
+        <span class="cart-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 4H5V6H7V4ZM8 6L9.5 12H19V14H9.95L8.7 17.47C8.64 17.69 8.45 17.84 8.22 17.84H6C5.72 17.84 5.5 17.62 5.5 17.34C5.5 17.06 5.72 16.84 6 16.84H7.15L8.4 13.37L6.2 9H4V7H6.1L7 4Z" fill="currentColor" />
+            <circle cx="9" cy="20" r="1.5" fill="currentColor" />
+            <circle cx="17" cy="20" r="1.5" fill="currentColor" />
+          </svg>
+        </span>
+        <span class="cart-label">CARRITO</span>
+        <span class="cart-count" id="cart-count">0</span>
+      </button>
+    </header>
+
+    <div class="cart-sidebar" id="cart-sidebar" aria-label="Carrito de compras">
+      <div class="cart-header">
+        <h2>Tu carrito</h2>
+        <button class="cart-close" id="cart-close" aria-label="Cerrar carrito">×</button>
+      </div>
+      <div class="cart-body">
+        <section class="cart-items" id="cart-items">
+          <p class="cart-empty">El carrito está vacío.</p>
+        </section>
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Subtotal</span>
+          <strong id="cart-subtotal">—</strong>
+        </div>
+        <button class="button button--primary" id="cart-confirm-btn" disabled>Confirmar pedido</button>
+        <button class="button button--ghost" id="cart-continue-shopping-btn">Seguir comprando</button>
+      </div>
+    </div>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero section section--dark">
+        <div class="hero__content reveal">
+          <h1>Presencia. Identidad.</h1>
+          <p class="hero__copy">
+            Moda y fragancias con actitud.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="#catalogo">Ver Catálogo</a>
+            <a class="button button--primary" href="#inspiracion">Inspiración personalizada</a>
+          </div>
+        </div>
+        <div class="hero__visual reveal">
+          <div class="hero__image-wrap">
+            <div class="hero__star" aria-hidden="true">✦</div>
+            <div class="hero-carousel" data-autoplay="4500" aria-roledescription="carousel">
+              <div class="carousel__slides">
+                <div class="carousel__slide active">
+                  <img src="assets/coleccion-1/IMAGENES-INDIVIDUAL/MUJER-TOMA-1.png" alt="ZAYRO estilo 1" loading="eager" />
+                </div>
+                <div class="carousel__slide">
+                  <img src="assets/coleccion-1/IMAGENES-INDIVIDUAL/MUJER-TOMA-2-.png" alt="ZAYRO estilo 2" loading="lazy" />
+                </div>
+                <div class="carousel__slide">
+                  <img src="assets/coleccion-1/IMAGENES-INDIVIDUAL/TOMA-1-HOMBRE.png" alt="ZAYRO estilo 3" loading="lazy" />
+                </div>
+                <div class="carousel__slide">
+                  <img src="assets/coleccion-1/IMAGENES-INDIVIDUAL/TOMA-2-HOMBRE.png" alt="ZAYRO estilo 4" loading="lazy" />
+                </div>
+              </div>
+              <div class="carousel__nav">
+                <button class="carousel__prev" aria-label="Anterior">‹</button>
+                <button class="carousel__next" aria-label="Siguiente">›</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+      <!-- CATEGORÍAS -->
+      <section class="section section--dark" id="essence">
+        <div class="section__heading reveal">
+          <p class="eyebrow">CATEGORÍAS</p>
+          <h2>Explora por tipo.</h2>
+        </div>
+        <div class="category-grid">
+          <article class="card card--large reveal">
+            <div class="card__content">
+              <p class="card__label">PERFUMERÍA</p>
+              <h3>Fragancias con carácter.</h3>
+              <p>Originales, inspiraciones y decants.</p>
+            </div>
+          </article>
+          <article class="card card--large reveal">
+            <div class="card__content">
+              <p class="card__label">WEAR</p>
+              <h3>Ropa con presencia.</h3>
+              <p>Colección ZAYRO y prendas seleccionadas.</p>
+            </div>
+          </article>
+          <article class="card card--large reveal">
+            <div class="card__content">
+              <p class="card__label">CUSTOM</p>
+              <h3>Accesorios y detalles.</h3>
+              <p>Gorras, gafas, bolsos y más.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- CATÁLOGO DE PERFUMES -->
+      <section class="section section--light" id="catalogo">
+        <div class="section__heading reveal">
+          <p class="eyebrow eyebrow--dark">CATÁLOGO</p>
+          <h2>Top 20 perfumes</h2>
+          <p>Los más buscados en Colombia.</p>
+        </div>
+        <div class="catalog-grid reveal">
+          <article class="product-card product-card--catalog" data-product-id="lattafa-asad">
+            <div class="product-card__media">
+              <img src="assets/catalog-images/Lattafa Asad.png" alt="Lattafa Asad" loading="lazy" />
+            </div>
+            <div class="product-card__body">
+              <p class="card__label">Lattafa</p>
+              <h3>Lattafa Asad</h3>
+              <p class="product-price">Consultar precio</p>
+              <button class="button product-cta">Ver producto</button>
+            </div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="lattafa-yara">
+            <div class="product-card__media">
+              <img src="assets/catalog-images/Lattafa Yara.png" alt="Lattafa Yara" loading="lazy" />
+            </div>
+            <div class="product-card__body">
+              <p class="card__label">Lattafa</p>
+              <h3>Lattafa Yara</h3>
+              <p class="product-price">Consultar precio</p>
+              <button class="button product-cta">Ver producto</button>
+            </div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="lattafa-khamrah">
+            <div class="product-card__media">
+              <img src="assets/catalog-images/Lattafa Khamrah.png" alt="Lattafa Khamrah" loading="lazy" />
+            </div>
+            <div class="product-card__body">
+              <p class="card__label">Lattafa</p>
+              <h3>Lattafa Khamrah</h3>
+              <p class="product-price">Consultar precio</p>
+              <button class="button product-cta">Ver producto</button>
+            </div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="orientica-amber-rouge">
+            <div class="product-card__media">
+              <img src="assets/catalog-images/Orientica Amber Rouge.png" alt="Orientica Amber Rouge" loading="lazy" />
+            </div>
+            <div class="product-card__body">
+              <p class="card__label">Orientica</p>
+              <h3>Orientica Amber Rouge</h3>
+              <p class="product-price">Consultar precio</p>
+              <button class="button product-cta">Ver producto</button>
+            </div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="club-de-nuit-intense-man">
+            <div class="product-card__media">
+              <img src="assets/catalog-images/Club de Nuit Intense Man.png" alt="Club de Nuit Intense Man" loading="lazy" />
+            </div>
+            <div class="product-card__body">
+              <p class="card__label">Armaf</p>
+              <h3>Club de Nuit Intense Man</h3>
+              <p class="product-price">Consultar precio</p>
+              <button class="button product-cta">Ver producto</button>
+            </div>
+          </article>
+        </div>
+        <div class="catalog-grid reveal">
+          <article class="product-card product-card--catalog" data-product-id="armaf-odyssey-mandarin-sky">
+            <div class="product-card__media"><img src="assets/catalog-images/Armaf Odyssey Mandarin Sky.png" alt="Armaf Odyssey Mandarin Sky" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Armaf</p><h3>Armaf Odyssey Mandarin Sky</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="lattafa-eclaire">
+            <div class="product-card__media"><img src="assets/catalog-images/Lattafa Eclaire.png" alt="Lattafa Eclaire" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Lattafa</p><h3>Lattafa Eclaire</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="bharara-king">
+            <div class="product-card__media"><img src="assets/catalog-images/Bharara King.png" alt="Bharara King" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Bharara</p><h3>Bharara King</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="dior-sauvage">
+            <div class="product-card__media"><img src="assets/catalog-images/Dior Sauvage.png" alt="Dior Sauvage" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Dior</p><h3>Dior Sauvage</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="bleu-de-chanel">
+            <div class="product-card__media"><img src="assets/catalog-images/Bleu de Chanel.png" alt="Bleu de Chanel" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Chanel</p><h3>Bleu de Chanel</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+        </div>
+        <div class="catalog-grid reveal">
+          <article class="product-card product-card--catalog" data-product-id="paco-rabanne-1-million">
+            <div class="product-card__media"><img src="assets/catalog-images/Paco Rabanne 1 Million.png" alt="Paco Rabanne 1 Million" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Paco Rabanne</p><h3>Paco Rabanne 1 Million</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="versace-eros-edt">
+            <div class="product-card__media"><img src="assets/catalog-images/versace eros edt.png" alt="Versace Eros EDT" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Versace</p><h3>Versace Eros EDT</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="carolina-herrera-good-girl">
+            <div class="product-card__media"><img src="assets/catalog-images/Carolina Herrera Good Girl.png" alt="Carolina Herrera Good Girl" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Carolina Herrera</p><h3>Carolina Herrera Good Girl</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="acqua-di-gio">
+            <div class="product-card__media"><img src="assets/catalog-images/Acqua Di Giò.png" alt="Acqua Di Giò" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Giorgio Armani</p><h3>Acqua Di Giò</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="paco-rabanne-invictus">
+            <div class="product-card__media"><img src="assets/catalog-images/Paco Rabanne Invictus.png" alt="Paco Rabanne Invictus" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Paco Rabanne</p><h3>Paco Rabanne Invictus</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+        </div>
+        <div class="catalog-grid reveal">
+          <article class="product-card product-card--catalog" data-product-id="lancome-idole">
+            <div class="product-card__media"><img src="assets/catalog-images/Lancôme Idôle.png" alt="Lancôme Idôle" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Lancôme</p><h3>Lancôme Idôle</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="ysl-libre">
+            <div class="product-card__media"><img src="assets/catalog-images/Yves Saint Laurent Libre.png" alt="YSL Libre" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Yves Saint Laurent</p><h3>Yves Saint Laurent Libre</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="jean-paul-gaultier-le-male-elixir">
+            <div class="product-card__media"><img src="assets/catalog-images/Jean Paul Gaultier Le Male Elixir.png" alt="Le Male Elixir" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Jean Paul Gaultier</p><h3>Jean Paul Gaultier Le Male Elixir</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="valentino-born-in-roma">
+            <div class="product-card__media"><img src="assets/catalog-images/Valentino Born In Roma.png" alt="Valentino Born In Roma" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Valentino</p><h3>Valentino Born In Roma</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+          <article class="product-card product-card--catalog" data-product-id="calvin-klein-ck-one">
+            <div class="product-card__media"><img src="assets/catalog-images/Calvin Klein CK One.png" alt="Calvin Klein CK One" loading="lazy" /></div>
+            <div class="product-card__body"><p class="card__label">Calvin Klein</p><h3>Calvin Klein CK One</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- INSPIRACIÓN PERSONALIZADA -->
+      <section class="section section--light" id="inspiracion">
+        <div class="section__heading reveal">
+          <p class="eyebrow">DISEÑO EXCLUSIVO</p>
+          <h2>¿No encuentras tu fragancia ideal?</h2>
+          <p>Crea tu inspiración personalizada con envases exclusivos.</p>
+        </div>
+        <div class="inspiracion-landing-hook reveal">
+          <div class="inspiracion-landing-grid" id="inspiracion-landing-grid"></div>
+        </div>
+        <button class="button button--primary button--large reveal" id="btn-inspiracion" style="margin: 2rem auto; display: block;">
+          Pedir mi inspiración personalizada
+        </button>
+
+        <div class="modal modal--inspiracion" id="modal-inspiracion" aria-label="Configurar inspiración personalizada">
+          <div class="modal-content modal-content--inspiracion">
+            <button class="modal-close" id="modal-inspiracion-close" aria-label="Cerrar">&times;</button>
+            <div class="inspiracion-step" id="step-aroma" data-step="1">
+              <h3>Paso 1: ¿Qué aroma buscas?</h3>
+              <p class="step-description">Selecciona una fragancia popular o escribe la que deseas:</p>
+              <input type="text" id="aroma-search" class="aroma-search" placeholder="Busca un aroma..." />
+              <div class="aroma-grid" id="aroma-grid"></div>
+              <p class="step-description" style="margin-top: 1.5rem; opacity: 0.8;">¿No ves tu esencia?</p>
+              <button class="button button--ghost" id="btn-hablar-asesor" style="width: 100%;">Hablar con asesor</button>
+              <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: flex-end;">
+                <button class="button button--ghost" onclick="closeInspirationModal()">Cancelar</button>
+                <button class="button button--primary" id="btn-next-frasco" disabled>Siguiente →</button>
+              </div>
+            </div>
+            <div class="inspiracion-step" id="step-frasco" data-step="2" style="display: none;">
+              <h3>Paso 2: Elige tu envase</h3>
+              <p class="step-description">Escoge el frasco y la cantidad.</p>
+              <div class="frasco-gallery" id="frasco-gallery"></div>
+              <div class="cantidad-selector" style="margin-top: 1.5rem;">
+                <label for="cantidad-inspiracion" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Cantidad:</label>
+                <input type="number" id="cantidad-inspiracion" min="1" max="99" value="1" style="width: 100%; padding: 0.75rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(255,255,255,0.05); color: white; font-size: 1rem;" />
+              </div>
+              <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: space-between;">
+                <button class="button button--ghost" id="btn-back-aroma">← Volver</button>
+                <button class="button button--primary" id="btn-next-confirmacion" disabled>Siguiente →</button>
+              </div>
+            </div>
+            <div class="inspiracion-step" id="step-confirmacion" data-step="3" style="display: none;">
+              <h3>Resumen</h3>
+              <div class="resumen-inspiracion">
+                <div class="resumen-item"><strong>Aroma:</strong><span id="resumen-aroma">-</span></div>
+                <div class="resumen-item"><strong>Envase:</strong><span id="resumen-frasco">-</span></div>
+                <div class="resumen-item"><strong>Cantidad:</strong><span id="resumen-cantidad">1</span></div>
+                <div class="resumen-item"><strong>Precio:</strong><span id="resumen-precio">Consultar con asesor</span></div>
+              </div>
+              <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: space-between;">
+                <button class="button button--ghost" id="btn-back-frasco">← Volver</button>
+                <button class="button button--primary button--large" id="btn-agregar-inspiracion" style="flex: 1;">Agregar al carrito</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COLECCIÓN ZAYRO -->
+      <section class="section section--dark" id="featured">
+        <div class="section__heading reveal">
+          <p class="eyebrow">COLECCIÓN</p>
+          <h2>Colección 01</h2>
+        </div>
+        <div class="product-grid">
+          <article class="product-card reveal">
+            <div class="product-card__media">
+              <img class="product-image product-image--front" src="assets/coleccion-1/CAMISA-DE-FRENTE.png" alt="Camisa ZAYRO frente" loading="lazy" />
+              <img class="product-image product-image--back" src="assets/coleccion-1/CAMISA-TOMA-TRASERA.png" alt="Camisa ZAYRO detrás" loading="lazy" />
+            </div>
+            <div class="product-card__body">
+              <p class="card__label">COLECCIÓN</p>
+              <h3>Colección 01</h3>
+              <a href="https://api.whatsapp.com/send/?phone=573016731498&text&type=phone_number&app_absent=0&utm_source=ig">Consultar</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- PAGOS Y ENVÍOS -->
+      <section class="section section--dark" id="shipping">
+        <div class="section__heading reveal">
+          <p class="eyebrow">PAGOS · ENVÍOS</p>
+          <h2>Comodidad y cobertura nacional.</h2>
+        </div>
+        <div class="payment-wrap reveal">
+          <div class="payment-chips">
+            <span>Nequi</span>
+            <span>Llaves</span>
+            <span>WhatsApp</span>
+          </div>
+          <p>Envíos nacionales a toda Colombia con seguimiento claro.</p>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section section--light" id="faq">
+        <div class="section__heading reveal">
+          <p class="eyebrow eyebrow--dark">FAQ</p>
+          <h2>Preguntas frecuentes.</h2>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item reveal">
+            <button class="faq-question" aria-expanded="false">¿Los perfumes son originales?<span>+</span></button>
+            <div class="faq-answer"><p>Trabajamos con fragancias originales 100 % auténticas de marcas de diseñador y de nicho, así como inspiraciones de alta concentración con esencias premium. Cada producto indica claramente su categoría.</p></div>
+          </article>
+          <article class="faq-item reveal">
+            <button class="faq-question" aria-expanded="false">¿Qué diferencia hay entre un original y una inspiración?<span>+</span></button>
+            <div class="faq-answer"><p>Los originales son fragancias de marcas comerciales con su empaque y autenticidad garantizada. Las inspiraciones son elaboradas por ZAYRO con esencias premium de alta concentración Parfum, logrando una calidad equiparable a los mejores diseñadores.</p></div>
+          </article>
+          <article class="faq-item reveal">
+            <button class="faq-question" aria-expanded="false">¿Cómo solicito una inspiración personalizada?<span>+</span></button>
+            <div class="faq-answer"><p>Selecciona el aroma de tu preferencia, elige el envase y la cantidad desde nuestra sección de inspiración personalizada. Una vez configurado, puedes agregarlo a tu carrito o consultar con un asesor por WhatsApp.</p></div>
+          </article>
+          <article class="faq-item reveal">
+            <button class="faq-question" aria-expanded="false">¿Realizan envíos a toda Colombia?<span>+</span></button>
+            <div class="faq-answer"><p>Sí, realizamos envíos nacionales a toda Colombia con seguimiento claro. Una vez confirmado tu pedido, te compartimos la guía de rastreo para que puedas monitorear tu entrega.</p></div>
+          </article>
+          <article class="faq-item reveal">
+            <button class="faq-question" aria-expanded="false">¿Cuánto tarda el envío?<span>+</span></button>
+            <div class="faq-answer"><p>El tiempo de entrega varía entre 2 y 5 días hábiles, dependiendo de la ciudad de destino. Los pedidos se despachan dentro de las 24 horas posteriores a la confirmación del pago.</p></div>
+          </article>
+          <article class="faq-item reveal">
+            <button class="faq-question" aria-expanded="false">¿Puedo recibir asesoría antes de comprar?<span>+</span></button>
+            <div class="faq-answer"><p>Por supuesto. Puedes escribirnos directamente por WhatsApp o usar nuestro chat en línea. Un asesor te atenderá de forma personalizada para ayudarte a encontrar la mejor opción según tus gustos y necesidades.</p></div>
+          </article>
+          <article class="faq-item reveal">
+            <button class="faq-question" aria-expanded="false">¿Qué métodos de pago aceptan?<span>+</span></button>
+            <div class="faq-answer"><p>Aceptamos Nequi, Llaves y coordinación directa por WhatsApp. Una vez confirmado tu pedido, te enviaremos los datos para realizar la transferencia.</p></div>
+          </article>
+          <article class="faq-item reveal">
+            <button class="faq-question" aria-expanded="false">¿Puedo personalizar un envase?<span>+</span></button>
+            <div class="faq-answer"><p>Sí, ofrecemos personalización de envases para inspirations y prendas seleccionadas bajo pedido. Consulta con nuestro equipo por WhatsApp para conocer las opciones disponibles.</p></div>
+          </article>
+          <article class="faq-item reveal">
+            <button class="faq-question" aria-expanded="false">¿Cómo hago seguimiento a mi pedido?<span>+</span></button>
+            <div class="faq-answer"><p>Una vez despachado tu pedido, recibirás un mensaje con el número de guía y el enlace de rastreo para que puedas monitorear el estado de tu entrega en tiempo real.</p></div>
+          </article>
+          <article class="faq-item reveal">
+            <button class="faq-question" aria-expanded="false">¿Qué pasa si no encuentro la fragancia que busco?<span>+</span></button>
+            <div class="faq-answer"><p>Si no encuentras la fragancia que deseas en nuestro catálogo, puedes solicitar una inspiración personalizada o escribirnos por WhatsApp. Trabajamos con una amplia variedad de esencias y podemos evaluar tu solicitud.</p></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- CLIENTES QUE CONFIAR -->
+      <section class="section section--dark" id="confianza">
+        <div class="section__heading reveal">
+          <p class="eyebrow">CONFIANZA</p>
+          <h2>Clientes que confían en ZAYRO.</h2>
+        </div>
+        <div class="metrics-grid reveal">
+          <div class="metric-card">
+            <span class="metric-number" data-target="2500">0</span>
+            <span class="metric-label">Consultas atendidas</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-number" data-target="1000">0</span>
+            <span class="metric-label">Pedidos gestionados</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-number" data-target="20">0</span>
+            <span class="metric-label">Ciudades con cobertura</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-number" data-target="365">0</span>
+            <span class="metric-label">Días de atención al año</span>
+          </div>
+        </div>
+        <p class="metrics-testimonial reveal">
+          Cada consulta es atendida de forma personalizada para ayudarte a encontrar la mejor opción según tus gustos y necesidades.
+        </p>
+      </section>
+
+      <!-- CTA -->
+      <section class="section section--cta" id="contact">
+        <div class="cta-card reveal">
+          <p class="eyebrow">CONTACTO</p>
+          <h2>Encuentra tu esencia.</h2>
+          <p>Escríbenos para recibir asesoría.</p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="https://api.whatsapp.com/send/?phone=573016731498&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" rel="noreferrer">WhatsApp</a>
+            <a class="button button--ghost" href="https://www.instagram.com/zayro_lifestyle/" target="_blank" rel="noreferrer">Instagram</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <p class="footer-brand">ZAYRO✦</p>
+        <p>Perfumería, moda y accesorios.</p>
+      </div>
+      <div>
+        <h4>Explorar</h4>
+        <a href="#catalogo">PERFUMES</a>
+        <a href="#featured">COLECCIÓN</a>
+        <a href="#inspiracion">INSPIRACIÓN</a>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <a href="https://api.whatsapp.com/send/?phone=573016731498&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" rel="noreferrer">WhatsApp</a>
+        <a href="https://www.instagram.com/zayro_lifestyle/" target="_blank" rel="noreferrer">Instagram</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="terminos.html">Términos y Condiciones</a>
+        <a href="privacidad.html">Política de Privacidad</a>
+        <a href="#faq">Preguntas Frecuentes</a>
+        <a href="#contact">Contacto</a>
+      </div>
+    </footer>
+
+    <!-- PRODUCT DETAIL SECTION (replaces modal) -->
+    <section class="product-detail-section" id="product-detail-section" aria-label="Detalle del producto">
+      <div class="product-detail-container">
+        <button class="product-detail-close" id="product-detail-close" aria-label="Cerrar">&times;</button>
+        <div class="product-detail-layout" id="product-detail-layout">
+          <!-- Image gallery -->
+          <div class="detail-gallery">
+            <div class="detail-gallery-main" id="detail-gallery-main">
+              <img id="detail-image-main" src="" alt="Producto" />
+            </div>
+            <div class="detail-gallery-thumbs" id="detail-gallery-thumbs"></div>
+          </div>
+          <!-- Product info -->
+          <div class="detail-info">
+            <p class="detail-brand" id="detail-brand"></p>
+            <h2 id="detail-title"></h2>
+            <p class="detail-price" id="detail-price"></p>
+            <p class="detail-status" id="detail-status"></p>
+
+            <div class="detail-section">
+              <p class="detail-section-title">Descripción</p>
+              <p id="detail-why"></p>
+            </div>
+
+            <div class="detail-notes" id="detail-notes">
+              <p class="detail-section-title">Notas olfativas</p>
+              <div class="notes-grid" id="notes-grid"></div>
+            </div>
+
+            <div class="detail-actions">
+              <button class="button button--primary" id="detail-add-cart" style="flex:1;">Agregar al carrito</button>
+              <button class="button button--ghost" id="detail-contact-wa">Consultar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Floating buttons -->
+    <button class="floating-social floating-cart-logo" id="floating-cart-toggle" aria-label="Abrir carrito">
+      <img src="assets/logo-sin-fondo/Carritos.png" alt="Carrito" />
+      <span class="cart-count floating-count" id="floating-cart-count">0</span>
+    </button>
+    <a class="floating-social floating-wa" href="https://api.whatsapp.com/send/?phone=573016731498" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+      <img src="assets/logo-sin-fondo/whatsapp.png" alt="WhatsApp" />
+    </a>
+    <a class="floating-social floating-ig" href="https://www.instagram.com/zayro_lifestyle/" target="_blank" rel="noreferrer" aria-label="Instagram">
+      <img src="assets/logo-sin-fondo/instagram.png" alt="Instagram" />
+    </a>
+
+    <!-- Chat -->
+    <div class="chat-widget" id="chat-widget">
+      <button class="chat-toggle" id="chat-toggle" aria-label="Abrir chat">
+        <span class="chat-icon">💬</span>
+      </button>
+      <div class="chat-panel" id="chat-panel">
+        <div class="chat-header">
+          <h3>ZAYRO ✦</h3>
+          <span class="chat-status">En línea</span>
+          <button class="chat-close" id="chat-close" aria-label="Cerrar chat">&times;</button>
+        </div>
+        <div class="chat-body" id="chat-body"></div>
+        <div class="chat-input-area">
+          <input type="text" class="chat-input" id="chat-input" placeholder="Escribe tu mensaje..." autocomplete="off" />
+          <button class="chat-send" id="chat-send" aria-label="Enviar">→</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="products.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
