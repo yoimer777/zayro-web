@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "build": "node -e \"console.log('Static site build complete')\""
+    "build": "node -e \"console.log('Static site build complete')\"",
+    "vercel-build": "npm run build"
   }
 }
