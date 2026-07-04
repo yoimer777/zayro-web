@@ -477,8 +477,8 @@ function addCartButtonsToProducts() {
 function getCheckoutFormData() {
   const name = document.getElementById('checkout-modal-name')?.value.trim() || '';
   const city = document.getElementById('checkout-modal-city')?.value.trim() || '';
-  const phone = document.getElementById('checkout-modal-phone')?.value.trim() || '';
-  return { name, city, phone };
+  const email = document.getElementById('checkout-modal-email')?.value.trim() || '';
+  return { name, city, email };
 }
 
 function setCheckoutMessage(message, isError = false) {
@@ -494,7 +494,7 @@ function openCheckoutModal() {
   const customer = cartState.customer || {};
   document.getElementById('checkout-modal-name').value = customer.name || '';
   document.getElementById('checkout-modal-city').value = customer.city || '';
-  document.getElementById('checkout-modal-phone').value = customer.phone || '';
+  document.getElementById('checkout-modal-email').value = customer.email || '';
   setCheckoutMessage('');
   modal.classList.add('is-open');
   modal.setAttribute('aria-hidden', 'false');
@@ -512,7 +512,7 @@ function buildWhatsappMessage() {
   const user = cartState.customer || getCheckoutFormData();
   const name = user.name || 'No indicado';
   const city = user.city || 'No indicado';
-  const phone = user.phone || 'No indicado';
+  const email = user.email || 'No indicado';
   const lines = [
     'Hola, equipo de ZAYRO. 👋',
     '',
@@ -527,7 +527,7 @@ function buildWhatsappMessage() {
   lines.push('Mis datos:');
   lines.push(`• Nombre: ${name}`);
   lines.push(`• Ciudad/Residencia: ${city}`);
-  lines.push(`• Teléfono: ${phone}`);
+  lines.push(`• Correo: ${email}`);
   lines.push('');
   lines.push('Quedo atento(a). Gracias.');
   return lines.join('\n');
@@ -562,8 +562,6 @@ function initCart() {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeCheckoutModal();
   });
-  const panel = document.querySelector('.checkout-modal__panel');
-  panel?.addEventListener('mouseleave', closeCheckoutModal);
   renderCart();
 }
 
