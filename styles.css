@@ -639,6 +639,7 @@ a:focus-visible {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: #fff;
+  font-weight: 400;
 }
 
 .card__content--overlay p {
