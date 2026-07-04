@@ -20,12 +20,47 @@ body {
   background: var(--zayro-black);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(184, 145, 90, 0.10), transparent 24%),
+    radial-gradient(circle at 85% 12%, rgba(255,255,255,0.05), transparent 18%),
+    radial-gradient(circle at 70% 80%, rgba(184, 145, 90, 0.08), transparent 22%);
+  animation: driftGlow 12s ease-in-out infinite alternate;
+}
+
+body::after {
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.02) 45%, transparent 100%);
+  mix-blend-mode: screen;
+  animation: sweepLight 10s linear infinite;
 }
 
 img {
   display: block;
   width: 100%;
   height: auto;
+}
+
+@keyframes driftGlow {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(-2%, 2%, 0) scale(1.04); }
+}
+
+@keyframes sweepLight {
+  0% { transform: translateX(-30%); }
+  100% { transform: translateX(30%); }
 }
 
 a { color: inherit; text-decoration: none; }
