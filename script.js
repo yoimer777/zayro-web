@@ -250,6 +250,15 @@ document.getElementById('detail-contact-wa')?.addEventListener('click', () => {
 // ========== PRODUCT CARDS ==========
 function initProductCards() {
   document.querySelectorAll('.product-card--catalog').forEach(card => {
+    if (!card.querySelector('.product-benefits')) {
+      const body = card.querySelector('.product-card__body');
+      if (body) {
+        const benefits = document.createElement('div');
+        benefits.className = 'product-benefits';
+        benefits.innerHTML = '<span>Asesoría</span><span>Envío</span><span>Personalización</span>';
+        body.insertBefore(benefits, body.querySelector('.product-cta'));
+      }
+    }
     card.addEventListener('click', (e) => {
       if (e.target.closest('.product-cta') || e.target.closest('.product-add')) return;
       const productId = card.dataset.productId;

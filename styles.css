@@ -319,7 +319,30 @@ a:focus-visible {
   display: flex;
   flex-wrap: wrap;
   gap: 0.9rem;
-  margin-bottom: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.trust-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.2rem;
+}
+
+.trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--zayro-bone);
+  font-size: 0.82rem;
+}
+
+.trust-pill span {
+  font-size: 0.95rem;
 }
 
 .button {
@@ -499,6 +522,21 @@ a:focus-visible {
   margin: 0 auto;
 }
 
+.conversion-banner {
+  width: var(--container);
+  margin: 0 auto 1.15rem;
+  padding: 0.95rem 1.1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(184, 145, 90, 0.24);
+  background: rgba(184, 145, 90, 0.12);
+  color: var(--zayro-black);
+}
+
+.conversion-banner p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
 .catalog-grid + .catalog-grid { margin-top: 1.25rem; }
 
 .product-card--catalog {
@@ -554,6 +592,24 @@ a:focus-visible {
   gap: 0.3rem;
   background: #fff;
   color: #111;
+}
+
+.product-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.1rem;
+}
+
+.product-benefits span {
+  display: inline-flex;
+  padding: 0.3rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(184, 145, 90, 0.12);
+  color: var(--zayro-black);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
 .product-card--catalog .card__label {
@@ -1062,10 +1118,30 @@ a:focus-visible {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.cart-promo {
+  margin: 0 0 1rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 14px;
+  background: rgba(184, 145, 90, 0.12);
+  border: 1px solid rgba(184, 145, 90, 0.24);
+}
+
+.cart-promo strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--zayro-bone);
+}
+
+.cart-promo p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.85rem;
+}
+
 .checkout-modal {
   position: fixed;
   inset: 0;
-  z-index: 1200;
+  z-index: 1300;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1083,7 +1159,7 @@ a:focus-visible {
 .checkout-modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.72);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
@@ -1091,11 +1167,19 @@ a:focus-visible {
 .checkout-modal__panel {
   position: relative;
   width: min(520px, 100%);
-  padding: 1.4rem;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+  padding: 1.5rem;
+  border-radius: 26px;
+  background: #ffffff;
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.3);
   z-index: 1;
+  transform: translateY(20px) scale(0.98);
+  transition: transform 220ms ease, opacity 220ms ease;
+  opacity: 0;
+}
+
+.checkout-modal.is-open .checkout-modal__panel {
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
 .checkout-modal__close {
@@ -1168,6 +1252,42 @@ a:focus-visible {
   justify-content: flex-end;
   gap: 0.8rem;
   margin-top: 0.35rem;
+}
+
+.checkout-modal__actions .button {
+  min-width: 140px;
+  padding: 0.95rem 1.2rem;
+  font-weight: 700;
+}
+
+.checkout-modal__actions .button--primary {
+  background: #b8915a;
+  color: #111111;
+  border-color: transparent;
+}
+
+.checkout-modal__actions .button--primary:hover {
+  background: #9a7447;
+}
+
+.checkout-modal__actions .button--ghost {
+  background: #f7f3e9;
+  color: #111111;
+  border-color: rgba(17, 17, 17, 0.12);
+}
+
+.checkout-modal__actions .button--ghost:hover {
+  background: #efe9dc;
+}
+
+.checkout-modal__actions .button--ghost:focus,
+.checkout-modal__actions .button--primary:focus {
+  outline: 2px solid rgba(184, 145, 90, 0.6);
+  outline-offset: 2px;
+}
+
+.checkout-modal__close {
+  color: #111111;
 }
 
 .cart-total {
