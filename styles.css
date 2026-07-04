@@ -255,13 +255,6 @@ a:focus-visible {
   max-width: 700px;
 }
 
-.hero__story {
-  margin: 0 0 1.5rem;
-  max-width: 640px;
-  color: rgba(245, 243, 239, 0.86);
-  font-size: 0.98rem;
-  line-height: 1.7;
-}
 
 .section--light .section__heading p,
 .section--light .faq-answer p {
