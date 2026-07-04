@@ -751,7 +751,11 @@ a:focus-visible {
   cursor: pointer;
 }
 
-.faq-question span { color: var(--zayro-accent); font-size: 1.2rem; }
+.faq-question span {
+  color: var(--zayro-accent);
+  font-size: 1.2rem;
+  transition: transform 220ms ease, color 220ms ease;
+}
 
 .faq-answer {
   display: grid;
@@ -763,6 +767,15 @@ a:focus-visible {
   overflow: hidden;
   margin: 0;
   padding: 0 1.2rem 0;
+}
+
+.faq-item.is-open .faq-question {
+  background: rgba(184, 145, 90, 0.1);
+}
+
+.faq-item.is-open .faq-question span {
+  transform: rotate(45deg);
+  color: var(--zayro-black);
 }
 
 .faq-item.is-open .faq-answer { grid-template-rows: 1fr; }
@@ -1047,6 +1060,69 @@ a:focus-visible {
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.03);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cart-checkout {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.cart-checkout__title {
+  margin: 0 0 0.75rem;
+  color: var(--zayro-bone);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.cart-checkout__hint {
+  margin: 0.75rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.checkout-form {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.checkout-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.checkout-field span {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.8rem;
+}
+
+.checkout-field input {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--zayro-bone);
+}
+
+.checkout-field input:focus {
+  outline: none;
+  border-color: rgba(184, 145, 90, 0.8);
+  box-shadow: 0 0 0 2px rgba(184, 145, 90, 0.16);
+}
+
+.checkout-form__message {
+  min-height: 1.05rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.8rem;
+}
+
+.checkout-form__message.is-error {
+  color: #ffb4b4;
 }
 
 .cart-total {

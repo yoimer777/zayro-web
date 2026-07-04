@@ -474,7 +474,33 @@ function addCartButtonsToProducts() {
   });
 }
 
+function getCheckoutFormData() {
+  const name = document.getElementById('checkout-name')?.value.trim() || '';
+  const city = document.getElementById('checkout-city')?.value.trim() || '';
+  const phone = document.getElementById('checkout-phone')?.value.trim() || '';
+  return { name, city, phone };
+}
+
+function setCheckoutMessage(message, isError = false) {
+  const msg = document.getElementById('checkout-form-message');
+  if (!msg) return;
+  msg.textContent = message;
+  msg.classList.toggle('is-error', isError);
+}
+
+function syncCheckoutFormFromState() {
+  const customer = cartState.customer || {};
+  document.getElementById('checkout-name').value = customer.name || '';
+  document.getElementById('checkout-city').value = customer.city || '';
+  document.getElementById('checkout-phone').value = customer.phone || '';
+  setCheckoutMessage('');
+}
+
 function buildWhatsappMessage() {
+  const user = cartState.customer || getCheckoutFormData();
+  const name = user.name || 'No indicado';
+  const city = user.city || 'No indicado';
+  const phone = user.phone || 'No indicado';
   const lines = [
     'Hola, equipo de ZAYRO. 👋',
     '',
@@ -487,9 +513,9 @@ function buildWhatsappMessage() {
   });
   lines.push('');
   lines.push('Mis datos:');
-  lines.push('• Nombre:');
-  lines.push('• Ciudad:');
-  lines.push('• Teléfono:');
+  lines.push(`• Nombre: ${name}`);
+  lines.push(`• Ciudad/Residencia: ${city}`);
+  lines.push(`• Teléfono: ${phone}`);
   lines.push('');
   lines.push('Quedo atento(a). Gracias.');
   return lines.join('\n');
@@ -497,6 +523,14 @@ function buildWhatsappMessage() {
 
 function startWhatsappCheckout() {
   if (!cartState.hasItems()) { openCartSidebar(); return; }
+  const customer = getCheckoutFormData();
+  if (!customer.name || !customer.city) {
+    setCheckoutMessage('Ingresa tu nombre y tu ciudad o residencia para continuar.', true);
+    openCartSidebar();
+    document.getElementById('checkout-name')?.focus();
+    return;
+  }
+  cartState.setCustomerInfo(customer);
   const url = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(buildWhatsappMessage())}`;
   window.open(url, '_blank');
 }
@@ -507,7 +541,36 @@ function initCart() {
   document.getElementById('cart-close')?.addEventListener('click', closeCartSidebar);
   document.getElementById('cart-confirm-btn')?.addEventListener('click', startWhatsappCheckout);
   document.getElementById('cart-continue-shopping-btn')?.addEventListener('click', closeCartSidebar);
+  document.getElementById('checkout-form')?.addEventListener('input', () => {
+    const customer = getCheckoutFormData();
+    if (customer.name || customer.city || customer.phone) {
+      cartState.setCustomerInfo(customer);
+    } else {
+      cartState.setCustomerInfo(null);
+    }
+    setCheckoutMessage('');
+  });
+  syncCheckoutFormFromState();
   renderCart();
+}
+
+function initFaqAccordion() {
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const button = item.querySelector('.faq-question');
+    if (!button) return;
+    button.addEventListener('click', () => {
+      const willOpen = !item.classList.contains('is-open');
+      document.querySelectorAll('.faq-item.is-open').forEach(openItem => {
+        if (openItem !== item) {
+          openItem.classList.remove('is-open');
+          const openButton = openItem.querySelector('.faq-question');
+          openButton?.setAttribute('aria-expanded', 'false');
+        }
+      });
+      item.classList.toggle('is-open', willOpen);
+      button.setAttribute('aria-expanded', String(willOpen));
+    });
+  });
 }
 
 // ========== CHAT ==========
@@ -1035,6 +1098,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeaderScroll();
   initNavToggle();
   initCart();
+  initFaqAccordion();
   initProductCards();
   initChat();
   initInspirationModal();

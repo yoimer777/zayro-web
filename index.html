@@ -53,6 +53,25 @@
         </section>
       </div>
       <div class="cart-footer">
+        <div class="cart-checkout">
+          <p class="cart-checkout__title">Tu información rápida</p>
+          <form class="checkout-form" id="checkout-form">
+            <label class="checkout-field">
+              <span>Nombre</span>
+              <input type="text" id="checkout-name" name="name" placeholder="Tu nombre" required />
+            </label>
+            <label class="checkout-field">
+              <span>¿De dónde eres / dónde resides?</span>
+              <input type="text" id="checkout-city" name="city" placeholder="Ciudad o región" required />
+            </label>
+            <label class="checkout-field">
+              <span>Teléfono (opcional)</span>
+              <input type="tel" id="checkout-phone" name="phone" placeholder="Tu WhatsApp" />
+            </label>
+            <p class="checkout-form__message" id="checkout-form-message" role="status" aria-live="polite"></p>
+          </form>
+          <p class="cart-checkout__hint">Usaremos estos datos para preparar tu pedido y enviarlo por WhatsApp.</p>
+        </div>
         <div class="cart-total">
           <span>Subtotal</span>
           <strong id="cart-subtotal">—</strong>
