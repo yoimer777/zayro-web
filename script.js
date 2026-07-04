@@ -1120,8 +1120,24 @@ document.addEventListener('DOMContentLoaded', () => {
   initCart();
   initFaqAccordion();
   initProductCards();
+  initCategoryTouchEffects();
   initChat();
   initInspirationModal();
   renderLandingFrascoHook();
   initMetrics();
 });
+
+function initCategoryTouchEffects() {
+  document.querySelectorAll('.card--category').forEach(card => {
+    let activeTimeout;
+    card.addEventListener('touchstart', () => {
+      card.classList.add('touch-active');
+      clearTimeout(activeTimeout);
+    }, { passive: true });
+    const removeTouchActive = () => {
+      activeTimeout = setTimeout(() => card.classList.remove('touch-active'), 150);
+    };
+    card.addEventListener('touchend', removeTouchActive, { passive: true });
+    card.addEventListener('touchcancel', removeTouchActive, { passive: true });
+  });
+}

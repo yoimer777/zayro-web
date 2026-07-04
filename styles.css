@@ -541,9 +541,21 @@ a:focus-visible {
 .card__media {
   width: 100%;
   aspect-ratio: 1 / 1;
+  background-image: var(--bg-image, none);
   background-size: cover;
   background-position: center;
   position: relative;
+  transition: background-image 280ms ease;
+}
+
+.card--category:hover .card__media,
+.card--category:focus-visible .card__media,
+.card--category.touch-active .card__media {
+  background-image: var(--hover-bg-image, var(--bg-image));
+}
+
+.card__media--placeholder {
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(184, 145, 90, 0.18));
 }
 
 .card__content {
@@ -595,6 +607,14 @@ a:focus-visible {
   .card--category {
     min-height: 0;
   }
+}
+
+.featured-note {
+  margin: 0.75rem 0 0;
+  max-width: 660px;
+  color: rgba(245, 243, 239, 0.76);
+  font-size: 0.98rem;
+  line-height: 1.65;
 }
 
 /* ===== CATALOG GRID (Phase 4 - Redesigned cards) ===== */
