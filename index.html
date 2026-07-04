@@ -53,31 +53,43 @@
         </section>
       </div>
       <div class="cart-footer">
-        <div class="cart-checkout">
-          <p class="cart-checkout__title">Tu información rápida</p>
-          <form class="checkout-form" id="checkout-form">
-            <label class="checkout-field">
-              <span>Nombre</span>
-              <input type="text" id="checkout-name" name="name" placeholder="Tu nombre" required />
-            </label>
-            <label class="checkout-field">
-              <span>¿De dónde eres / dónde resides?</span>
-              <input type="text" id="checkout-city" name="city" placeholder="Ciudad o región" required />
-            </label>
-            <label class="checkout-field">
-              <span>Teléfono (opcional)</span>
-              <input type="tel" id="checkout-phone" name="phone" placeholder="Tu WhatsApp" />
-            </label>
-            <p class="checkout-form__message" id="checkout-form-message" role="status" aria-live="polite"></p>
-          </form>
-          <p class="cart-checkout__hint">Usaremos estos datos para preparar tu pedido y enviarlo por WhatsApp.</p>
-        </div>
         <div class="cart-total">
           <span>Subtotal</span>
           <strong id="cart-subtotal">—</strong>
         </div>
         <button class="button button--primary" id="cart-confirm-btn" disabled>Confirmar pedido</button>
         <button class="button button--ghost" id="cart-continue-shopping-btn">Seguir comprando</button>
+      </div>
+    </div>
+
+    <div class="checkout-modal" id="checkout-modal" aria-hidden="true">
+      <div class="checkout-modal__backdrop" data-close-checkout-modal="true"></div>
+      <div class="checkout-modal__panel" role="dialog" aria-modal="true" aria-labelledby="checkout-modal-title" tabindex="-1">
+        <button class="checkout-modal__close" id="checkout-modal-close" aria-label="Cerrar">×</button>
+        <div class="checkout-modal__content">
+          <p class="eyebrow eyebrow--dark">FINALIZAR PEDIDO</p>
+          <h3 id="checkout-modal-title">¿Quieres dejar tus datos para la asesoría?</h3>
+          <p class="checkout-modal__copy">Solo necesitas tu nombre y ciudad. Si prefieres, ciérralo y continúa sin completar nada.</p>
+          <form class="checkout-modal__form" id="checkout-modal-form">
+            <label class="checkout-field">
+              <span>Nombre</span>
+              <input type="text" id="checkout-modal-name" name="name" placeholder="Tu nombre" />
+            </label>
+            <label class="checkout-field">
+              <span>¿De dónde eres / dónde resides?</span>
+              <input type="text" id="checkout-modal-city" name="city" placeholder="Ciudad o región" />
+            </label>
+            <label class="checkout-field">
+              <span>Teléfono (opcional)</span>
+              <input type="tel" id="checkout-modal-phone" name="phone" placeholder="Tu WhatsApp" />
+            </label>
+            <p class="checkout-form__message" id="checkout-form-message" role="status" aria-live="polite"></p>
+            <div class="checkout-modal__actions">
+              <button class="button button--ghost" id="checkout-skip-btn" type="button">Cerrar</button>
+              <button class="button button--primary" id="checkout-send-btn" type="submit">Enviar por WhatsApp</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
 
