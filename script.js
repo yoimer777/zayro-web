@@ -1,5 +1,9 @@
 let currentAroma = null;
 let currentFrasco = null;
+let currentPrecio = null;
+let currentProductVariant = null;
+let currentProductCut = null;
+let currentProductSize = null;
 let chatIsTyping = false;
 let chatHistory = [];
 
@@ -7,11 +11,11 @@ let chatHistory = [];
 
 const chatFlow = {
   greeting: {
-    message: "Hola 👋\n\nBienvenido a ZAYRO.\n\nEstoy aquí para ayudarte.\n\n¿Sobre qué necesitas información?",
+    message: "Hola 👋\n\nBienvenido a ZAYRO.\n\nEstoy aquí para ayudarte con perfumes, ropa o accesorios.\n\n¿Sobre qué quieres hablar?",
     options: [
       { label: "Perfumes", next: "perfumes" },
-      { label: "Envíos", next: "envios" },
-      { label: "Pagos", next: "pagos" },
+      { label: "Ropa", next: "ropa" },
+      { label: "Accesorios", next: "accesorios" },
       { label: "Inspiración personalizada", action: "inspiracion" },
       { label: "Hablar con un asesor", action: "whatsapp" }
     ]
@@ -81,6 +85,7 @@ const chatFlow = {
     options: [
       { label: "Costo de envío", next: "costo-envio" },
       { label: "Tiempo de entrega", next: "tiempo-entrega" },
+      { label: "Ver todo", next: "catalogo-general" },
       { label: "Hablar con un asesor", action: "whatsapp" },
       { label: "No resolvió mi duda", action: "no-resuelto" }
     ]
@@ -101,9 +106,10 @@ const chatFlow = {
     ]
   },
   pagos: {
-    message: "Aceptamos varios métodos de pago:\n\n• Nequi\n• Daviplata\n• Bancolombia\n• Efectivo (solo en puntos de encuentro)",
+    message: "Aceptamos varios métodos de pago:\n\n• Nequi\n• Daviplata\n• Bancolombia\n• Efectivo (solo en puntos de encuentro)\n\nSi quieres, te envío la forma más fácil para tu compra.",
     options: [
       { label: "¿Cómo funciona?", next: "como-pagar" },
+      { label: "Ver catálogo completo", next: "catalogo-general" },
       { label: "Hablar con un asesor", action: "whatsapp" },
       { label: "No resolvió mi duda", action: "no-resuelto" }
     ]
@@ -115,7 +121,49 @@ const chatFlow = {
       { label: "No resolvió mi duda", action: "no-resuelto" }
     ]
   },
-  "inspiracion": {
+  ropa: {
+    message: "Nuestra colección incluye camisas oversize y semi-oversize con corte urbano y actitud premium.\n\n¿Quieres ver las piezas más destacadas o necesitas ayuda con tallas?",
+    options: [
+      { label: "Ver colección", action: "coleccion" },
+      { label: "Preguntar por tallas", next: "tallas" },
+      { label: "Hablar con un asesor", action: "whatsapp" },
+      { label: "No resolvió mi duda", action: "no-resuelto" }
+    ]
+  },
+  tallas: {
+    message: "Trabajamos principalmente con cortes oversize y semi-oversize.\n\nSi prefieres algo más ajustado o una recomendación personalizada, te ayudo con el estilo y la talla adecuada.",
+    options: [
+      { label: "Ver colección", action: "coleccion" },
+      { label: "Hablar con un asesor", action: "whatsapp" },
+      { label: "No resolvió mi duda", action: "no-resuelto" }
+    ]
+  },
+  accesorios: {
+    message: "También tenemos accesorios como gorras, joyería, gafas, cintillos, bolsos y termos.\n\nTodo pensado para completar tu look urbano con estilo.",
+    options: [
+      { label: "Ver accesorios", next: "accesorios-ver" },
+      { label: "Hablar con un asesor", action: "whatsapp" },
+      { label: "No resolvió mi duda", action: "no-resuelto" }
+    ]
+  },
+  "accesorios-ver": {
+    message: "Puedes explorar nuestra sección de accesorios y consultar disponibilidad por WhatsApp.\n\n¿Quieres que te muestre los productos que tenemos ahora?",
+    options: [
+      { label: "Mostrar accesorios", action: "accesorios" },
+      { label: "Hablar con un asesor", action: "whatsapp" },
+      { label: "No resolvió mi duda", action: "no-resuelto" }
+    ]
+  },
+  "catalogo-general": {
+    message: "Aquí tienes el catálogo completo: perfumes, inspiración, colección y accesorios.\n\nPuedes navegar libremente o pedirme una recomendación directa.",
+    options: [
+      { label: "Ir a perfumes", action: "catalogo" },
+      { label: "Ir a ropa", action: "coleccion" },
+      { label: "Ir a accesorios", action: "accesorios" },
+      { label: "Hablar con un asesor", action: "whatsapp" }
+    ]
+  },
+  inspiracion: {
     message: "¿Quieres una fragancia única? Con ZAYRO puedes crear tu inspiración personalizada.\n\nElige tu aroma favorito y el envase que más te guste, y preparamos todo para ti.",
     options: [
       { label: "Quiero empezar", action: "empezar-inspiracion" },
@@ -157,7 +205,6 @@ function addChatMessage(text, isBot = true) {
 // ========== PRODUCT DETAIL SECTION (replaces modal) ==========
 const detailSection = document.getElementById('product-detail-section');
 const detailClose = document.getElementById('product-detail-close');
-let currentProductId = null;
 
 function openProductDetail(productId) {
   const product = PRODUCTS[productId];
@@ -168,13 +215,14 @@ function openProductDetail(productId) {
   document.getElementById('detail-image-main').alt = product.name;
   document.getElementById('detail-title').textContent = product.name;
   document.getElementById('detail-brand').textContent = product.brand || 'ZAYRO';
-  document.getElementById('detail-price').textContent = 'Consultar con asesor';
-  document.getElementById('detail-status').textContent = 'Consultar disponibilidad';
-  document.getElementById('detail-why').textContent = product.why;
-
+  document.getElementById('detail-why').textContent = product.description || product.why || '';
+  currentProductCut = product.cuts && product.cuts.length ? product.cuts[0] : null;
+  currentProductSize = product.sizes && product.sizes.length ? product.sizes[0] : null;
+  updateProductVariant();
+  const isClothing = product.cuts && product.cuts.length && product.sizes && product.sizes.length;
+  document.getElementById('detail-hint').textContent = isClothing ? '2XL+ tiene costo adicional. Te asesoramos por WhatsApp. Métodos de pago en desarrollo.' : '';
   renderThumbnails(product);
   renderPresentations(product);
-  renderNotes(product);
 
   detailSection.classList.add('is-open');
   document.body.style.overflow = 'hidden';
@@ -204,28 +252,102 @@ function renderThumbnails(product) {
   });
 }
 
-function renderPresentations(product) {
-  // Presentaciones eliminadas visualmente
+function updateProductVariant() {
+  if (currentProductCut && currentProductSize) {
+    currentProductVariant = {
+      label: `${currentProductCut.label} · ${currentProductSize.label}`,
+      basePrice: currentProductCut.basePrice,
+      surcharge: currentProductSize.surcharge,
+      price: currentProductCut.basePrice + currentProductSize.surcharge
+    };
+  } else {
+    currentProductVariant = null;
+  }
+
+  const priceEl = document.getElementById('detail-price');
+  const statusEl = document.getElementById('detail-status');
+
+  if (priceEl) {
+    priceEl.textContent = currentProductVariant ? formatCurrency(currentProductVariant.price) : 'Bajo encargo';
+  }
+  if (statusEl) {
+    statusEl.textContent = currentProductVariant
+      ? `Corte ${currentProductCut.label} · Talla ${currentProductSize.label}`
+      : '';
+  }
 }
 
-function renderNotes(product) {
-  const container = document.getElementById('notes-grid');
-  if (!product.notes) {
+function renderPresentations(product) {
+  const container = document.getElementById('detail-variant');
+  if (!container) return;
+
+  const sections = [];
+
+  if (product.cuts && product.cuts.length) {
+    sections.push(`
+      <div class="detail-section">
+        <p class="detail-section-title">Corte</p>
+        <div class="variant-options" id="cut-options"></div>
+      </div>
+    `);
+  }
+
+  if (product.sizes && product.sizes.length) {
+    sections.push(`
+      <div class="detail-section">
+        <p class="detail-section-title">Talla</p>
+        <div class="variant-options" id="size-options"></div>
+      </div>
+      <p style="margin:0.5rem 0 0;color:var(--zayro-mist);font-size:0.9rem;">2XL y 3XL tienen costo adicional.</p>
+    `);
+  }
+
+  if (!sections.length) {
+    container.style.display = 'none';
     container.innerHTML = '';
-    document.getElementById('detail-notes').style.display = 'none';
     return;
   }
-  document.getElementById('detail-notes').style.display = 'block';
-  const labels = { top: 'Salida', heart: 'Corazón', base: 'Fondo' };
-  container.innerHTML = Object.entries(product.notes).map(([key, notes]) => `
-    <div class="note-group">
-      <p class="note-group-label">${labels[key] || key}</p>
-      <div class="note-group-tags">
-        ${notes.map(n => `<span class="note-tag">${n}</span>`).join('')}
-      </div>
-    </div>
-  `).join('');
+
+  container.style.display = 'block';
+  container.innerHTML = sections.join('');
+
+  if (product.cuts && product.cuts.length) {
+    const options = document.getElementById('cut-options');
+    options.innerHTML = product.cuts.map((cut, index) => `
+      <button type="button" class="variant-button ${index === 0 ? 'is-active' : ''}" data-cut="${cut.value}">
+        ${cut.label}
+      </button>
+    `).join('');
+    options.querySelectorAll('.variant-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        options.querySelectorAll('.variant-button').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        const cutValue = btn.dataset.cut;
+        currentProductCut = product.cuts.find(cut => cut.value === cutValue) || product.cuts[0];
+        updateProductVariant();
+      });
+    });
+  }
+
+  if (product.sizes && product.sizes.length) {
+    const options = document.getElementById('size-options');
+    options.innerHTML = product.sizes.map((size, index) => `
+      <button type="button" class="variant-button ${index === 0 ? 'is-active' : ''}" data-size="${size.value}">
+        ${size.label}
+      </button>
+    `).join('');
+    options.querySelectorAll('.variant-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        options.querySelectorAll('.variant-button').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        const sizeValue = btn.dataset.size;
+        currentProductSize = product.sizes.find(size => size.value === sizeValue) || product.sizes[0];
+        updateProductVariant();
+      });
+    });
+  }
 }
+
 
 detailClose?.addEventListener('click', closeProductDetail);
 detailSection?.addEventListener('click', (e) => {
@@ -234,7 +356,21 @@ detailSection?.addEventListener('click', (e) => {
 
 document.getElementById('detail-add-cart')?.addEventListener('click', () => {
   if (currentProductId) {
-    cartState.add(currentProductId);
+    const product = PRODUCTS[currentProductId];
+    if (!product) return;
+    const item = {
+      productId: product.id,
+      name: product.name,
+      category: product.label || 'Sin categoría',
+      brand: product.brand || 'ZAYRO',
+      price: currentProductVariant && currentProductVariant.price ? currentProductVariant.price : 0,
+      status: currentProductVariant && currentProductVariant.price ? 'Disponible' : 'Bajo encargo',
+      description: product.description || product.why || '',
+      image: product.image,
+      quantity: 1,
+      variant: currentProductVariant ? currentProductVariant.label : null
+    };
+    cartState.add(item);
     closeProductDetail();
   }
 });
@@ -242,7 +378,8 @@ document.getElementById('detail-add-cart')?.addEventListener('click', () => {
 document.getElementById('detail-contact-wa')?.addEventListener('click', () => {
   if (currentProductId) {
     const product = PRODUCTS[currentProductId];
-    const msg = `Hola, estoy interesado en ${product.name}. ¿Me das más información?`;
+    const variantInfo = currentProductVariant ? `, ${currentProductVariant.label}` : '';
+    const msg = `Hola, estoy interesado en ${product.name}${variantInfo}. ¿Me das más información?`;
     window.open(`https://api.whatsapp.com/send/?phone=573016731498&text=${encodeURIComponent(msg)}`, '_blank');
   }
 });
@@ -250,15 +387,16 @@ document.getElementById('detail-contact-wa')?.addEventListener('click', () => {
 // ========== PRODUCT CARDS ==========
 function initProductCards() {
   document.querySelectorAll('.product-card--catalog').forEach(card => {
-    if (!card.querySelector('.product-benefits')) {
-      const body = card.querySelector('.product-card__body');
-      if (body) {
-        const benefits = document.createElement('div');
-        benefits.className = 'product-benefits';
-        benefits.innerHTML = '<span>Asesoría</span><span>Envío</span><span>Personalización</span>';
-        body.insertBefore(benefits, body.querySelector('.product-cta'));
+    const productId = card.dataset.productId;
+    const product = productId ? PRODUCTS[productId] : null;
+    if (product) {
+      const priceEl = card.querySelector('.product-price');
+      if (priceEl) {
+        priceEl.textContent = '';
+        priceEl.style.display = 'none';
       }
     }
+
     card.addEventListener('click', (e) => {
       if (e.target.closest('.product-cta') || e.target.closest('.product-add')) return;
       const productId = card.dataset.productId;
@@ -334,27 +472,32 @@ const cartState = {
       };
       successMessage = `${product.name} agregado.`;
     } else if (typeof productOrItem === 'object' && productOrItem !== null) {
+      const normalizedPrice = typeof productOrItem.precio === 'number'
+        ? productOrItem.precio
+        : (typeof productOrItem.price === 'number' ? productOrItem.price : 0);
       itemToAdd = {
         id: productOrItem.id || `custom-${Date.now()}`,
         productId: productOrItem.productId || `custom-${Date.now()}`,
         name: productOrItem.name || 'Inspiración personalizada',
         category: productOrItem.category || 'Inspiración',
         brand: productOrItem.brand || 'ZAYRO',
-        price: typeof productOrItem.precio === 'number' ? productOrItem.precio : (typeof productOrItem.price === 'number' ? productOrItem.price : 0),
-        status: productOrItem.status || 'Consultar',
+        price: normalizedPrice,
+        status: productOrItem.status || (normalizedPrice > 0 ? 'Disponible' : 'Consultar'),
         description: productOrItem.description || '',
         image: productOrItem.image || 'assets/logo-sin-fondo/Carritos.png',
         quantity: typeof productOrItem.quantity === 'number' ? productOrItem.quantity : 1,
         aroma: productOrItem.aroma || null,
         frasco: productOrItem.frasco || null,
+        variant: productOrItem.variant || null,
         timestamp: productOrItem.timestamp || new Date().toISOString()
       };
       successMessage = `${itemToAdd.name} agregado.`;
     } else { return; }
 
-    const existing = this.items.find(item => item.productId === itemToAdd.productId && item.name === itemToAdd.name && item.category === itemToAdd.category);
+    const existing = this.items.find(item => item.productId === itemToAdd.productId && item.name === itemToAdd.name && item.category === itemToAdd.category && (item.variant || '') === (itemToAdd.variant || ''));
     if (existing) {
       existing.quantity += itemToAdd.quantity;
+      existing.price = itemToAdd.price || existing.price;
     } else {
       this.items.push(itemToAdd);
     }
@@ -426,7 +569,8 @@ function renderCart() {
         <img src="${item.image}" alt="${item.name}" class="cart-item__image" />
         <div class="cart-item__info">
           <h4>${item.name}</h4>
-          <p>Consultar con asesor</p>
+          <p>${item.price && item.price > 0 ? formatCurrency(item.price) : 'Consultar con asesor'}</p>
+          ${item.variant ? `<p style="margin:0.2rem 0 0;font-size:0.8rem;color:var(--zayro-mist)">Talla: ${item.variant}</p>` : ''}
           ${item.aroma ? `<p style="margin:0.2rem 0 0;font-size:0.8rem;color:var(--zayro-mist)">Aroma: ${item.aroma}</p>` : ''}
           ${item.frasco ? `<p style="margin:0;font-size:0.8rem;color:var(--zayro-mist)">Envase: ${item.frasco}</p>` : ''}
         </div>
@@ -440,7 +584,13 @@ function renderCart() {
     `).join('');
   }
   const sub = document.getElementById('cart-subtotal');
-  if (sub) sub.textContent = 'Consultar con asesor';
+  if (sub) {
+    if (cartState.hasConsultItems()) {
+      sub.textContent = 'Consultar con asesor';
+    } else {
+      sub.textContent = formatCurrency(cartState.getTotal());
+    }
+  }
   attachCartItemListeners();
 }
 
@@ -464,8 +614,9 @@ function closeCartSidebar() { document.getElementById('cart-sidebar')?.classList
 
 function addCartButtonsToProducts() {
   document.querySelectorAll('.product-card--catalog').forEach(card => {
-    if (card.querySelector('.product-add')) return;
     const productId = card.dataset.productId;
+    if (productId === 'zayro-camisa-coleccion') return;
+    if (card.querySelector('.product-add')) return;
     const body = card.querySelector('.product-card__body');
     if (!body) return;
     const addBtn = document.createElement('button');
@@ -478,7 +629,24 @@ function addCartButtonsToProducts() {
   document.querySelectorAll('.product-add').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      cartState.add(btn.dataset.productId);
+      const productId = btn.dataset.productId;
+      const product = PRODUCTS[productId];
+      if (!product) return;
+      const variant = product.sizes && product.sizes.length ? product.sizes[0] : null;
+      const price = variant?.price || product.price || 0;
+      const item = {
+        productId: product.id,
+        name: product.name,
+        category: product.label || 'Sin categoría',
+        brand: product.brand || 'ZAYRO',
+        price,
+        status: product.status || (price > 0 ? 'Disponible' : 'Consultar'),
+        description: product.description || product.why || '',
+        image: product.image,
+        quantity: 1,
+        variant: variant ? variant.label : null
+      };
+      cartState.add(item);
     });
   });
 }
@@ -530,7 +698,8 @@ function buildWhatsappMessage() {
     '🛍️ Productos:'
   ];
   cartState.items.forEach(item => {
-    lines.push(`• ${item.name} ×${item.quantity}`);
+    const variantInfo = item.variant ? ` (${item.variant})` : '';
+    lines.push(`• ${item.name}${variantInfo} ×${item.quantity}`);
   });
   lines.push('');
   lines.push('Mis datos:');
@@ -613,6 +782,7 @@ function renderChatOptions(options) {
   return optionsDiv;
 }
 
+
 function handleChatAction(action, label) {
   switch (action) {
     case 'whatsapp': {
@@ -624,13 +794,13 @@ function handleChatAction(action, label) {
       break;
     }
     case 'catalogo': {
-      addChatMessage('¡Claro! Aquí tienes nuestro catálogo.', true);
+      addChatMessage('¡Claro! Te llevo a la sección de perfumes originales.', true);
       const catalogoBtn = document.createElement('div');
       catalogoBtn.className = 'chat-options';
       const link = document.createElement('a');
       link.className = 'chat-option chat-option--accent';
       link.href = '#catalogo';
-      link.textContent = 'Ver catálogo de perfumes →';
+      link.textContent = 'Ir a perfumes →';
       link.addEventListener('click', () => {
         const panel = document.getElementById('chat-panel');
         if (panel) panel.classList.remove('is-open');
@@ -638,6 +808,42 @@ function handleChatAction(action, label) {
       catalogoBtn.appendChild(link);
       const chatBody = document.getElementById('chat-body');
       chatBody.appendChild(catalogoBtn);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      break;
+    }
+  case 'coleccion': {
+      addChatMessage('Perfecto, te muestro nuestra colección de ropa urbana.', true);
+      const coleccionBtn = document.createElement('div');
+      coleccionBtn.className = 'chat-options';
+      const link = document.createElement('a');
+      link.className = 'chat-option chat-option--accent';
+      link.href = '#featured';
+      link.textContent = 'Ver colección →';
+      link.addEventListener('click', () => {
+        const panel = document.getElementById('chat-panel');
+        if (panel) panel.classList.remove('is-open');
+      });
+      coleccionBtn.appendChild(link);
+      const chatBody = document.getElementById('chat-body');
+      chatBody.appendChild(coleccionBtn);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      break;
+    }
+  case 'accesorios': {
+      addChatMessage('Ahora te llevo a nuestros accesorios: gorras, joyas, gafas, bolsos y más.', true);
+      const accBtn = document.createElement('div');
+      accBtn.className = 'chat-options';
+      const link = document.createElement('a');
+      link.className = 'chat-option chat-option--accent';
+      link.href = '#accesorios';
+      link.textContent = 'Ver accesorios →';
+      link.addEventListener('click', () => {
+        const panel = document.getElementById('chat-panel');
+        if (panel) panel.classList.remove('is-open');
+      });
+      accBtn.appendChild(link);
+      const chatBody = document.getElementById('chat-body');
+      chatBody.appendChild(accBtn);
       chatBody.scrollTop = chatBody.scrollHeight;
       break;
     }
@@ -752,45 +958,50 @@ function handleUserFreeText(text) {
     costo: 'costo-envio',
     tiempo: 'tiempo-entrega',
     entrega: 'tiempo-entrega',
-    hola: 'greeting',
-    buenas: 'greeting',
-    ayu: 'greeting'
+    ropa: 'ropa',
+    coleccion: 'ropa',
+    camisa: 'ropa',
+    sudadera: 'ropa',
+    accesorio: 'accesorios',
+    accesorios: 'accesorios',
+    gorra: 'accesorios',
+    bolso: 'accesorios',
+    joya: 'accesorios',
+    gafas: 'accesorios'
   };
 
-  let matched = null;
-  for (const [word, node] of Object.entries(keywords)) {
-    if (lower.includes(word)) {
-      matched = node;
-      break;
+  const matchedKeyword = Object.keys(keywords).find((keyword) => lower.includes(keyword));
+  if (matchedKeyword) {
+    const next = keywords[matchedKeyword];
+    if (chatFlow[next]) {
+      showChatTyping();
+      setTimeout(() => {
+        addChatMessage(chatFlow[next].message, true);
+        const chatBody = document.getElementById('chat-body');
+        const optsEl = renderChatOptions(chatFlow[next].options);
+        chatBody.appendChild(optsEl);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        chatCurrentNode = next;
+      }, 500);
+      return;
     }
+
+    handleChatAction(next);
+    return;
   }
 
-  if (matched && chatFlow[matched]) {
-    showChatTyping();
-    const node = chatFlow[matched];
-    chatCurrentNode = matched;
-    setTimeout(() => {
-      addChatMessage(node.message, true);
-      const chatBody = document.getElementById('chat-body');
-      const optsEl = renderChatOptions(node.options);
-      chatBody.appendChild(optsEl);
-      chatBody.scrollTop = chatBody.scrollHeight;
-    }, 500);
-  } else {
-    showChatTyping();
-    setTimeout(() => {
-      addChatMessage("Gracias por compartirlo. Cuéntame más o elige una opción para ayudarte mejor.", true);
-      const chatBody = document.getElementById('chat-body');
-      const helpOpts = renderChatOptions([
-        { label: "Perfumes", next: "perfumes" },
-        { label: "Envíos", next: "envios" },
-        { label: "Pagos", next: "pagos" },
-        { label: "Hablar con un asesor", action: "whatsapp" }
-      ]);
-      chatBody.appendChild(helpOpts);
-      chatBody.scrollTop = chatBody.scrollHeight;
-    }, 500);
-  }
+  setTimeout(() => {
+    addChatMessage("Gracias por compartirlo. Cuéntame más o elige una opción para ayudarte mejor.", true);
+    const chatBody = document.getElementById('chat-body');
+    const helpOpts = renderChatOptions([
+      { label: "Perfumes", next: "perfumes" },
+      { label: "Envíos", next: "envios" },
+      { label: "Pagos", next: "pagos" },
+      { label: "Hablar con un asesor", action: "whatsapp" }
+    ]);
+    chatBody.appendChild(helpOpts);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }, 500);
 }
 
 function initChat() {
@@ -839,10 +1050,13 @@ const modalInspiracion = document.getElementById('modal-inspiracion');
 const btnInspiracion = document.getElementById('btn-inspiracion');
 const btnInspirationClose = document.getElementById('modal-inspiracion-close');
 
-function openInspirationModal() {
+function openInspirationModal(preserveFrasco = false) {
   modalInspiracion?.classList.add('is-open');
   document.body.style.overflow = 'hidden';
-  renderAromaOptions();
+  resetInspirationForm(preserveFrasco);
+  renderFrascoGrid();
+  renderInspirationAromaOptions();
+  showInspirationStep('detalle');
 }
 
 function closeInspirationModal() {
@@ -851,40 +1065,42 @@ function closeInspirationModal() {
   resetInspirationForm();
 }
 
-function resetInspirationForm() {
+function resetInspirationForm(preserveFrasco = false) {
   currentAroma = null;
-  currentFrasco = null;
-  document.getElementById('step-aroma').style.display = 'block';
-  document.getElementById('step-frasco').style.display = 'none';
-  document.getElementById('step-confirmacion').style.display = 'none';
-  document.getElementById('aroma-search').value = '';
+  currentPrecio = null;
+  if (!preserveFrasco) {
+    currentFrasco = null;
+  }
+  showInspirationStep('detalle');
+  document.getElementById('inspiracion-text').value = '';
+  document.getElementById('inspiracion-size').value = '';
+  document.querySelectorAll('.aroma-option.selected').forEach(card => card.classList.remove('selected'));
+  document.querySelectorAll('.price-option.selected').forEach(card => card.classList.remove('selected'));
+  if (!preserveFrasco) {
+    document.querySelectorAll('.frasco-card.selected').forEach(card => card.classList.remove('selected'));
+    document.getElementById('btn-frasco-next')?.setAttribute('disabled', '');
+  }
 }
 
-function renderAromaOptions() {
-  const grid = document.getElementById('aroma-grid');
-  if (!grid) return;
-  grid.innerHTML = AROMAS_INSPIRACION.map((aroma, idx) => `
-    <button class="aroma-option" data-aroma="${aroma.nombre}">
-      <span class="aroma-name">${aroma.nombre}</span>
-      <span class="aroma-category">${aroma.categoria}</span>
-      <span class="aroma-vibe">${aroma.vibe}</span>
-    </button>
-  `).join('');
-  grid.querySelectorAll('.aroma-option').forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentAroma = btn.dataset.aroma;
-      grid.querySelectorAll('.aroma-option').forEach(b => { b.style.opacity = '0.5'; b.style.border = '1px solid rgba(184,145,90,0.18)'; });
-      btn.style.opacity = '1';
-      btn.style.border = '2px solid var(--zayro-accent)';
-      document.getElementById('btn-next-frasco').disabled = false;
-    });
+function showInspirationStep(step) {
+  document.getElementById('step-frascos').style.display = step === 'frascos' ? 'block' : 'none';
+  document.getElementById('step-detalle').style.display = step === 'detalle' ? 'block' : 'none';
+  document.getElementById('step-confirmacion').style.display = step === 'confirmacion' ? 'block' : 'none';
+}
+
+function getUniqueFrascos() {
+  const seenImages = new Set();
+  return Object.entries(FRASCOS).filter(([key, frasco]) => {
+    if (seenImages.has(frasco.imagen)) return false;
+    seenImages.add(frasco.imagen);
+    return true;
   });
 }
 
-function renderFrascoOptions() {
-  const gallery = document.getElementById('frasco-gallery');
-  if (!gallery) return;
-  gallery.innerHTML = Object.entries(FRASCOS).map(([key, frasco]) => `
+function renderFrascoGrid() {
+  const grid = document.getElementById('frasco-grid');
+  if (!grid) return;
+  grid.innerHTML = getUniqueFrascos().map(([key, frasco]) => `
     <button type="button" class="frasco-card" data-frasco-key="${key}">
       <img src="${frasco.imagen}" alt="${frasco.nombre}" loading="lazy" />
       <div class="frasco-card-meta">
@@ -892,84 +1108,184 @@ function renderFrascoOptions() {
       </div>
     </button>
   `).join('');
-  gallery.querySelectorAll('.frasco-card').forEach(card => {
+
+  grid.querySelectorAll('.frasco-card').forEach(card => {
+    const key = card.dataset.frascoKey;
     card.addEventListener('click', () => {
-      currentFrasco = card.dataset.frascoKey;
-      gallery.querySelectorAll('.frasco-card').forEach(c => c.classList.remove('selected'));
+      if (currentFrasco === key) {
+        currentFrasco = null;
+        currentPrecio = null;
+        card.classList.remove('selected');
+        renderPriceOptions(null);
+        document.getElementById('btn-frasco-next')?.setAttribute('disabled', '');
+        return;
+      }
+      currentFrasco = key;
+      currentPrecio = null;
+      grid.querySelectorAll('.frasco-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
-      document.getElementById('btn-next-confirmacion').disabled = false;
+      renderPriceOptions(key);
+    });
+    if (currentFrasco === key) {
+      card.classList.add('selected');
+      renderPriceOptions(key);
+    }
+  });
+}
+
+function renderPriceOptions(frascoKey) {
+  const container = document.getElementById('frasco-price-options');
+  const nextButton = document.getElementById('btn-frasco-next');
+  if (!container) return;
+  if (!frascoKey) {
+    container.innerHTML = '<p style="color: var(--zayro-mist);">Selecciona un frasco para ver los precios.</p>';
+    nextButton?.setAttribute('disabled', '');
+    return;
+  }
+  const frasco = FRASCOS[frascoKey];
+  if (!frasco) return;
+  if (!currentPrecio) {
+    currentPrecio = frasco.precios[0] || null;
+  }
+  container.innerHTML = frasco.precios.map((precio, index) => {
+    const selected = currentPrecio && currentPrecio.volumen === precio.volumen && currentPrecio.valor === precio.valor;
+    return `
+      <button
+        type="button"
+        class="price-option${selected ? ' selected' : ''}"
+        data-precio-index="${index}"
+        data-precio-label="${precio.volumen}"
+        data-precio-value="${precio.valor}"
+        aria-pressed="${selected ? 'true' : 'false'}"
+      >
+        ${precio.volumen} · ${precio.valor}
+      </button>
+    `;
+  }).join('');
+  nextButton?.removeAttribute('disabled');
+  container.querySelectorAll('.price-option').forEach(option => {
+    option.addEventListener('click', () => {
+      const selectedLabel = option.dataset.precioLabel;
+      const selectedValue = option.dataset.precioValue;
+      const alreadySelected = currentPrecio && currentPrecio.volumen === selectedLabel && currentPrecio.valor === selectedValue;
+      if (alreadySelected) {
+        currentPrecio = null;
+        option.classList.remove('selected');
+        option.setAttribute('aria-pressed', 'false');
+        nextButton?.setAttribute('disabled', '');
+        return;
+      }
+      currentPrecio = {
+        volumen: selectedLabel,
+        valor: selectedValue
+      };
+      container.querySelectorAll('.price-option').forEach(o => {
+        o.classList.remove('selected');
+        o.setAttribute('aria-pressed', 'false');
+      });
+      option.classList.add('selected');
+      option.setAttribute('aria-pressed', 'true');
+      nextButton?.removeAttribute('disabled');
     });
   });
-  if (currentFrasco) {
-    const sel = gallery.querySelector(`.frasco-card[data-frasco-key="${currentFrasco}"]`);
-    if (sel) sel.classList.add('selected');
-  }
 }
 
-function showFrascoStep() {
-  if (!currentAroma) { renderCartNotification('Selecciona un aroma primero.'); return; }
-  document.getElementById('step-aroma').style.display = 'none';
-  document.getElementById('step-frasco').style.display = 'block';
-  renderFrascoOptions();
+function getAromaInitials(name) {
+  return name.split(' ').map(word => word[0]).join('').slice(0, 3).toUpperCase();
 }
 
-function showConfirmacionStep() {
-  if (!currentFrasco) { renderCartNotification('Selecciona un envase.'); return; }
-  document.getElementById('step-frasco').style.display = 'none';
-  document.getElementById('step-confirmacion').style.display = 'block';
-  const frasco = FRASCOS[currentFrasco];
-  const cantidad = parseInt(document.getElementById('cantidad-inspiracion').value) || 1;
-  document.getElementById('resumen-aroma').textContent = currentAroma;
-  document.getElementById('resumen-frasco').textContent = frasco.nombre;
-  document.getElementById('resumen-cantidad').textContent = cantidad;
-  document.getElementById('resumen-precio').textContent = 'Consultar con asesor';
+function renderInspirationAromaOptions() {
+  const grid = document.getElementById('inspiracion-aroma-grid');
+  const datalist = document.getElementById('inspiracion-presets');
+  if (!grid || !datalist) return;
+  grid.innerHTML = AROMAS_INSPIRACION.slice(0, 6).map(aroma => `
+      <button type="button" class="aroma-option" data-aroma="${aroma.nombre}">
+        <div class="aroma-image">
+          <img src="${aroma.image || `assets/catalog-images/${aroma.nombre}.png`}" alt="${aroma.nombre}" loading="lazy"
+            onload="this.nextElementSibling.style.display='none'"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" />
+          <div class="aroma-image-fallback">${getAromaInitials(aroma.nombre)}</div>
+        </div>
+        <div>
+          <span class="aroma-name">${aroma.nombre}</span>
+          <span class="aroma-category">${aroma.categoria}</span>
+          <p class="aroma-vibe">${aroma.vibe}</p>
+        </div>
+      </button>
+    `).join('');
+  datalist.innerHTML = AROMAS_INSPIRACION.map(aroma => `<option value="${aroma.nombre}"></option>`).join('');
+  grid.querySelectorAll('.aroma-option').forEach(option => {
+    option.addEventListener('click', () => {
+      const selected = option.dataset.aroma;
+      currentAroma = selected;
+      document.getElementById('inspiracion-text').value = selected;
+      grid.querySelectorAll('.aroma-option').forEach(o => o.classList.remove('selected'));
+      option.classList.add('selected');
+    });
+  });
+}
+
+function getInspirationSummaryData() {
+  const tamano = document.getElementById('inspiracion-size').value.trim();
+  const texto = document.getElementById('inspiracion-text').value.trim();
+  const descripcion = texto || currentAroma || 'Sin detalles';
+
+  return {
+    tamano,
+    texto,
+    descripcion
+  };
+}
+
+function updateInspirationSummary() {
+  document.getElementById('resumen-frasco').textContent = FRASCOS[currentFrasco]?.nombre || 'Frasco';
+  document.getElementById('resumen-precio').textContent = currentPrecio ? `${currentPrecio.volumen} · ${currentPrecio.valor}` : '-';
+  return {};
 }
 
 function addInspirationToCart() {
-  if (!currentAroma || !currentFrasco) { renderCartNotification('Completa todos los pasos.'); return; }
-  const frasco = FRASCOS[currentFrasco];
-  if (!frasco) { renderCartNotification('Selecciona un envase.'); return; }
-  const cantidad = parseInt(document.getElementById('cantidad-inspiracion').value) || 1;
-  if (cantidad < 1) { renderCartNotification('Cantidad debe ser mayor a 0.'); return; }
-  const item = {
-    type: 'inspiracion',
-    aroma: currentAroma,
-    frasco: frasco.nombre,
-    name: `Inspiración ${currentAroma} en ${frasco.nombre}`,
-    price: frasco.precioExtra || 0,
-    image: frasco.imagen,
-    category: 'Inspiración',
-    description: frasco.descripcion || '',
-    status: frasco.precioExtra > 0 ? 'Disponible' : 'Consultar',
-    quantity: cantidad,
-    timestamp: new Date().toISOString()
-  };
-  cartState.add(item);
-  addChatMessage(`¡Excelente! 🎁 ${item.name} (×${cantidad}) ya está en tu carrito.`, true);
-  closeInspirationModal();
+  if (!currentFrasco) { renderCartNotification('Selecciona un frasco.'); return; }
+  if (!currentPrecio) { renderCartNotification('Selecciona un precio para el frasco.'); return; }
+
+  updateInspirationSummary();
+  showInspirationStep('confirmacion');
+}
+
+function sendInspirationRequest() {
+  const { tamano, descripcion } = updateInspirationSummary();
+  const frascoNombre = FRASCOS[currentFrasco]?.nombre || 'un frasco';
+  const mensaje = `Hola, quiero que me hagan una fragancia similar a ${descripcion}.
+Frasco: ${frascoNombre}.
+Tamaño: ${tamano || 'A confirmar por WhatsApp'}.
+Te envío la imagen directamente por WhatsApp cuando se abra el chat.`;
+
+  addChatMessage('Perfecto, ya abrí el chat con el asesor. Te la hacemos y te aviso por WhatsApp.', true);
   document.getElementById('chat-panel')?.classList.add('is-open');
+  closeInspirationModal();
+  window.open(`https://api.whatsapp.com/send/?phone=573016731498&text=${encodeURIComponent(mensaje)}`, '_blank');
 }
 
 function renderLandingFrascoHook() {
   const hook = document.getElementById('inspiracion-landing-grid');
   if (!hook) return;
-  hook.innerHTML = Object.entries(FRASCOS).slice(0, 4).map(([key, frasco]) => `
-    <button type="button" class="inspiracion-landing-card" data-frasco-key="${key}">
-      <div class="card-image">
-      <img src="${frasco.imagen}" alt="${frasco.nombre}" loading="lazy" />
-    </div>
-    <div class="card-info">
-        <span>${frasco.nombre}</span>
-      </div>
-    </button>
-  `).join('');
+  const references = getUniqueFrascos().slice(0, 3);
+  hook.innerHTML = references.map(([key, frasco]) => `
+      <button type="button" class="inspiracion-landing-card" data-frasco-key="${key}">
+        <div class="card-image">
+          <img src="${frasco.imagen}" alt="${frasco.nombre}" loading="lazy" />
+        </div>
+        <div class="card-info">
+          <span>${frasco.nombre}</span>
+        </div>
+      </button>
+    `).join('');
   hook.querySelectorAll('.inspiracion-landing-card').forEach(card => {
     card.addEventListener('click', () => {
       hook.querySelectorAll('.inspiracion-landing-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
-      openInspirationModal();
-      showFrascoStep();
       currentFrasco = card.dataset.frascoKey;
+      openInspirationModal(true);
+      document.getElementById('inspiracion-text').value = '';
     });
   });
 }
@@ -977,31 +1293,73 @@ function renderLandingFrascoHook() {
 function initInspirationModal() {
   btnInspiracion?.addEventListener('click', openInspirationModal);
   btnInspirationClose?.addEventListener('click', closeInspirationModal);
-  document.getElementById('btn-next-frasco')?.addEventListener('click', showFrascoStep);
-  document.getElementById('btn-next-confirmacion')?.addEventListener('click', showConfirmacionStep);
-  document.getElementById('btn-back-aroma')?.addEventListener('click', () => {
-    document.getElementById('step-frasco').style.display = 'none';
-    document.getElementById('step-aroma').style.display = 'block';
+  document.getElementById('btn-frasco-next')?.addEventListener('click', addInspirationToCart);
+  document.getElementById('btn-back-frascos')?.addEventListener('click', () => showInspirationStep('detalle'));
+  document.getElementById('btn-detalle-next')?.addEventListener('click', () => {
+    renderFrascoGrid();
+    showInspirationStep('frascos');
   });
-  document.getElementById('btn-back-frasco')?.addEventListener('click', () => {
-    document.getElementById('step-confirmacion').style.display = 'none';
-    document.getElementById('step-frasco').style.display = 'block';
-  });
-  document.getElementById('btn-agregar-inspiracion')?.addEventListener('click', addInspirationToCart);
-  document.getElementById('btn-hablar-asesor')?.addEventListener('click', () => {
-    const input = document.getElementById('aroma-search').value.trim();
-    const msg = input
-      ? `Hola, me gustaría una inspiración de: ${input}.`
-      : 'Hola, quiero crear una inspiración personalizada.';
-    window.open(`https://api.whatsapp.com/send/?phone=573016731498&text=${encodeURIComponent(msg)}`, '_blank');
+  document.getElementById('btn-back-confirmacion')?.addEventListener('click', () => showInspirationStep('frascos'));
+  document.getElementById('btn-add-inspiracion-cart')?.addEventListener('click', () => {
+    if (!currentFrasco) { renderCartNotification('Selecciona un frasco.'); return; }
+    if (!currentPrecio) { renderCartNotification('Selecciona un precio para el frasco.'); return; }
+
+    const frasco = FRASCOS[currentFrasco];
+    cartState.add({
+      id: `inspiracion-${Date.now()}`,
+      productId: `inspiracion-${Date.now()}`,
+      name: `Inspiración personalizada - ${frasco?.nombre || 'Frasco'}`,
+      category: 'Inspiración',
+      brand: 'ZAYRO',
+      price: Number((currentPrecio.valor || '0').replace(/\D/g, '')) || 0,
+      status: 'Disponible',
+      description: 'Inspiración personalizada',
+      image: frasco?.imagen || 'assets/logo-sin-fondo/Carritos.png',
+      quantity: 1,
+      frasco: frasco?.nombre || '',
+      variant: currentPrecio ? `${currentPrecio.volumen} · ${currentPrecio.valor}` : null,
+      timestamp: new Date().toISOString()
+    });
+    renderCartNotification('Inspiración agregada al carrito.');
     closeInspirationModal();
   });
-  document.getElementById('aroma-search')?.addEventListener('keyup', (e) => {
-    const search = e.target.value.toLowerCase();
-    document.querySelectorAll('.aroma-option').forEach(opt => {
-      opt.style.display = opt.dataset.aroma.toLowerCase().includes(search) ? 'block' : 'none';
-    });
-  });
+  document.getElementById('btn-send-inspiracion')?.addEventListener('click', sendInspirationRequest);
+  initInspirationSwipeGestures();
+}
+
+function initInspirationSwipeGestures() {
+  const modal = document.getElementById('modal-inspiracion');
+  if (!modal) return;
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  modal.addEventListener('touchstart', event => {
+    const touch = event.changedTouches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+  }, { passive: true });
+
+  modal.addEventListener('touchend', event => {
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
+    const threshold = 50;
+
+    if (absX > absY && absX > threshold) {
+      if (deltaX > 0) {
+        if (document.getElementById('step-frascos').style.display === 'block') showInspirationStep('detalle');
+      } else {
+        if (document.getElementById('step-detalle').style.display === 'block') showInspirationStep('frascos');
+      }
+    }
+
+    if (absY > absX && absY > threshold && deltaY > 0) {
+      closeInspirationModal();
+    }
+  }, { passive: true });
 }
 
 // ========== CAROUSEL ==========
@@ -1061,9 +1419,21 @@ function initRevealAnimations() {
 // ========== HEADER SCROLL ==========
 function initHeaderScroll() {
   const header = document.querySelector('.site-header');
+  let lastScrollY = window.scrollY;
+
   window.addEventListener('scroll', () => {
-    header?.classList.toggle('scrolled', window.scrollY > 50);
-  });
+    const currentY = window.scrollY;
+    header?.classList.toggle('scrolled', currentY > 50);
+
+    if (!header) return;
+    if (currentY > lastScrollY + 8 && currentY > 120) {
+      header.classList.add('hidden');
+    } else if (currentY < lastScrollY - 8) {
+      header.classList.remove('hidden');
+    }
+
+    lastScrollY = currentY;
+  }, { passive: true });
 }
 
 // ========== METRICS ANIMATION ==========
@@ -1094,6 +1464,30 @@ function initMetrics() {
   counters.forEach(el => observer.observe(el));
 }
 
+function initCatalogToggle() {
+  const catalogWrap = document.querySelector('.catalog-grid-wrap');
+  const toggleBtn = document.querySelector('#catalog-toggle-btn');
+  if (!catalogWrap || !toggleBtn) return;
+
+  const label = toggleBtn.querySelector('.catalog-toggle-label');
+
+  const updateState = () => {
+    const expanded = catalogWrap.classList.contains('expanded');
+    catalogWrap.classList.toggle('collapsed', !expanded);
+    toggleBtn.setAttribute('aria-expanded', String(expanded));
+    if (label) {
+      label.textContent = expanded ? 'Ver menos perfumes' : 'Ver más perfumes';
+    }
+  };
+
+  toggleBtn.addEventListener('click', () => {
+    catalogWrap.classList.toggle('expanded');
+    updateState();
+  });
+
+  updateState();
+}
+
 // ========== NAV TOGGLE ==========
 function initNavToggle() {
   const toggle = document.querySelector('.nav-toggle');
@@ -1121,6 +1515,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
   initProductCards();
   initCategoryTouchEffects();
+  initCatalogToggle();
   initChat();
   initInspirationModal();
   renderLandingFrascoHook();

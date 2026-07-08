@@ -1771,24 +1771,42 @@ a:focus-visible {
 }
 
 .chat-toggle {
-  width: 56px;
+  min-width: 56px;
   height: 56px;
-  border-radius: 50%;
+  padding: 0 1rem;
+  border-radius: 999px;
   background: var(--zayro-accent);
   border: none;
   color: var(--zayro-black);
-  font-size: 1.6rem;
+  font-size: 1rem;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.55rem;
   box-shadow: 0 4px 20px rgba(184, 145, 90, 0.35);
   transition: all 250ms ease;
 }
 
 .chat-toggle:hover {
-  transform: scale(1.08);
+  transform: scale(1.04);
   box-shadow: 0 6px 28px rgba(184, 145, 90, 0.5);
+}
+
+.chat-toggle .chat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.chat-toggle .chat-label {
+  display: inline-block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .chat-panel {

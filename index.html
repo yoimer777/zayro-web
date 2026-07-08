@@ -23,7 +23,6 @@
         <span></span>
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Navegación principal">
-        <a href="#essence">FRAGANCIAS</a>
         <a href="#catalogo">PERFUMES ORIGINALES</a>
         <a href="#inspiracion">DISEÑO EXCLUSIVO</a>
         <a href="#featured">COLECCIÓN</a>
@@ -106,15 +105,7 @@
           <p class="hero__copy">
             Fragancias y estilo urbano.
           </p>
-          <div class="hero__actions">
-            <a class="button button--primary" href="#catalogo">Ver perfumes</a>
-            <a class="button button--primary" href="https://api.whatsapp.com/send/?phone=573016731498&text=Hola%20quiero%20asesor%C3%ADa%20para%20elegir%20mi%20fragancia" target="_blank" rel="noopener noreferrer">Hablar con asesor</a>
-          </div>
-          <div class="trust-bar reveal">
-            <div class="trust-pill"><strong>Respuesta rápida</strong></div>
-            <div class="trust-pill"><strong>Envío nacional</strong></div>
-            <div class="trust-pill"><strong>Hecho por emprendedores</strong></div>
-          </div>
+          <p class="hero__note reveal">Envíos nacionales. Asesoría personalizada.</p>
         </div>
         <div class="hero__visual reveal">
           <div class="hero__image-wrap">
@@ -148,7 +139,6 @@
       <!-- FRAGANCIAS -->
       <section class="section section--dark" id="essence">
         <div class="section__heading reveal">
-          <p class="eyebrow">FRAGANCIAS</p>
           <h2>Lo que ofrecemos</h2>
         </div>
         <div class="category-grid">
@@ -179,13 +169,16 @@
       <section class="section section--light" id="catalogo">
         <div class="section__heading reveal">
           <p class="eyebrow eyebrow--dark">PERFUMES ORIGINALES</p>
-          <h2>Perfumes originales</h2>
-          <p>Fragancias.</p>
+          <h2>Originales y 1.1</h2>
+        </div>
+        <div class="catalog-note reveal">
+          <strong>Originales y 1.1</strong> con o sin caja según disponibilidad. Escríbenos con la fragancia que buscas.
         </div>
         <div class="conversion-banner reveal">
           <p><strong>+2.500 consultas atendidas</strong> · asesoría y envío nacional.</p>
         </div>
-        <div class="catalog-grid reveal">
+        <div class="catalog-grid-wrap collapsed" id="catalog-grid-wrap">
+          <div class="catalog-grid reveal">
           <article class="product-card product-card--catalog" data-product-id="lattafa-asad">
             <div class="product-card__media">
               <img src="assets/catalog-images/Lattafa Asad.png" alt="Lattafa Asad" loading="lazy" />
@@ -308,62 +301,67 @@
             <div class="product-card__body"><p class="card__label">Calvin Klein</p><h3>Calvin Klein CK One</h3><p class="product-price">Consultar precio</p><button class="button product-cta">Ver producto</button></div>
           </article>
         </div>
+        <div class="catalog-actions reveal">
+          <button class="button button--ghost" id="catalog-toggle-btn" type="button" aria-expanded="false" aria-controls="catalog-grid-wrap">
+            <span class="catalog-toggle-label">Ver más perfumes</span>
+          </button>
+        </div>
       </section>
 
       <!-- DISEÑO EXCLUSIVO -->
       <section class="section section--light" id="inspiracion">
         <div class="section__heading reveal">
           <p class="eyebrow">DISEÑO EXCLUSIVO</p>
-          <h2>¿No encuentras tu fragancia ideal?</h2>
-          <p>Crea tu inspiración personalizada con envases exclusivos.</p>
+          <h2>Elige tu referencia</h2>
+          <p>Selecciona un ejemplo, sube lo que quieras mandar a hacer y elige el frasco antes de enviarlo por WhatsApp.</p>
         </div>
         <div class="inspiracion-landing-hook reveal">
           <div class="inspiracion-landing-grid" id="inspiracion-landing-grid"></div>
         </div>
         <button class="button button--primary button--large reveal" id="btn-inspiracion" style="margin: 2rem auto; display: block;">
-          Pedir mi inspiración personalizada
+          Quiero mi fragancia personalizada
         </button>
 
         <div class="modal modal--inspiracion" id="modal-inspiracion" aria-label="Configurar inspiración personalizada">
           <div class="modal-content modal-content--inspiracion">
             <button class="modal-close" id="modal-inspiracion-close" aria-label="Cerrar">&times;</button>
-            <div class="inspiracion-step" id="step-aroma" data-step="1">
-              <h3>Paso 1: ¿Qué aroma buscas?</h3>
-              <p class="step-description">Selecciona una fragancia popular o escribe la que deseas:</p>
-              <input type="text" id="aroma-search" class="aroma-search" placeholder="Busca un aroma..." />
-              <div class="aroma-grid" id="aroma-grid"></div>
-              <p class="step-description" style="margin-top: 1.5rem; opacity: 0.8;">¿No ves tu esencia?</p>
-              <button class="button button--ghost" id="btn-hablar-asesor" style="width: 100%;">Hablar con asesor</button>
-              <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: flex-end;">
-                <button class="button button--ghost" onclick="closeInspirationModal()">Cancelar</button>
-                <button class="button button--primary" id="btn-next-frasco" disabled>Siguiente →</button>
+            <div class="inspiracion-step" id="step-detalle" data-step="1">
+              <h3>Si no viste en el catálogo, mándanos tu inspiración</h3>
+              <p class="step-description">Elige aroma, escribe lo que deseas y luego ajusta frasco y precio. Si tienes una imagen, puedes enviarla por WhatsApp después de seleccionar tu frasco.</p>
+              <div class="aroma-grid" id="inspiracion-aroma-grid"></div>
+              <label for="inspiracion-text" style="display: block; margin-top: 1.5rem; font-weight: 700; letter-spacing: 0.03em;">Tu inspiración (opcional)</label>
+              <input list="inspiracion-presets" type="text" id="inspiracion-text" placeholder="Ej. cítrico, dulce, floral, amaderado..." style="width: 100%; padding: 0.9rem; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; background: rgba(255,255,255,0.06); color: white; font-size: 1rem;" />
+              <datalist id="inspiracion-presets"></datalist>
+              <p style="margin:1rem 0 0;color:var(--zayro-mist);font-size:0.9rem;">¿Tienes imagen? Envíala por WhatsApp una vez elijas el frasco.</p>
+              <label for="inspiracion-size" style="display: block; margin-top: 1.5rem; font-weight: 700; letter-spacing: 0.03em;">Tamaño (opcional)</label>
+              <input type="text" id="inspiracion-size" placeholder="Ej. 50 ml, 100 ml — lo afinamos por WhatsApp" style="width: 100%; padding: 0.9rem; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; background: rgba(255,255,255,0.06); color: white; font-size: 1rem; margin-top: 0.75rem;" />
+              <div class="modal-actions" style="margin-top: 1.5rem; display:flex; justify-content:flex-end; gap:0.75rem;">
+                <button class="button button--ghost" type="button" onclick="closeInspirationModal()">Cancelar</button>
+                <button class="button button--primary" type="button" id="btn-detalle-next">Siguiente</button>
               </div>
             </div>
-            <div class="inspiracion-step" id="step-frasco" data-step="2" style="display: none;">
-              <h3>Paso 2: Elige tu envase</h3>
-              <p class="step-description">Escoge el frasco y la cantidad.</p>
-              <div class="frasco-gallery" id="frasco-gallery"></div>
-              <div class="cantidad-selector" style="margin-top: 1.5rem;">
-                <label for="cantidad-inspiracion" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Cantidad:</label>
-                <input type="number" id="cantidad-inspiracion" min="1" max="99" value="1" style="width: 100%; padding: 0.75rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(255,255,255,0.05); color: white; font-size: 1rem;" />
-              </div>
-              <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: space-between;">
-                <button class="button button--ghost" id="btn-back-aroma">← Volver</button>
-                <button class="button button--primary" id="btn-next-confirmacion" disabled>Siguiente →</button>
+
+            <div class="inspiracion-step" id="step-frascos" data-step="2" style="display:none;">
+              <h3>Elige el frasco donde almacenarla</h3>
+              <div class="frasco-gallery" id="frasco-grid"></div>
+              <div class="price-selector" id="frasco-price-options" style="margin-top: 1rem;"></div>
+              <div class="modal-actions" style="margin-top: 1.5rem; display:flex; justify-content:space-between; gap:0.75rem;">
+                <button class="button button--ghost" type="button" id="btn-back-frascos">← Volver</button>
+                <button class="button button--primary" type="button" id="btn-frasco-next" disabled>Siguiente</button>
               </div>
             </div>
-            <div class="inspiracion-step" id="step-confirmacion" data-step="3" style="display: none;">
-              <h3>Resumen</h3>
+
+            <div class="inspiracion-step" id="step-confirmacion" data-step="3" style="display:none;">
+              <h3>Envíalo por WhatsApp</h3>
               <div class="resumen-inspiracion">
-                <div class="resumen-item"><strong>Aroma:</strong><span id="resumen-aroma">-</span></div>
-                <div class="resumen-item"><strong>Envase:</strong><span id="resumen-frasco">-</span></div>
-                <div class="resumen-item"><strong>Cantidad:</strong><span id="resumen-cantidad">1</span></div>
-                <div class="resumen-item"><strong>Precio:</strong><span id="resumen-precio">Consultar con asesor</span></div>
+                <div class="resumen-item"><strong>Frasco</strong><span id="resumen-frasco">-</span></div>
+                <div class="resumen-item"><strong>Precio</strong><span id="resumen-precio">-</span></div>
               </div>
-              <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: space-between;">
-                <button class="button button--ghost" id="btn-back-frasco">← Volver</button>
-                <button class="button button--primary button--large" id="btn-agregar-inspiracion" style="flex: 1;">Agregar al carrito</button>
+              <div class="modal-actions" style="margin-top: 1.5rem; display:flex; justify-content:space-between; gap:0.75rem;">
+                <button class="button button--ghost" type="button" id="btn-back-confirmacion">← Volver</button>
+                <button class="button button--primary" type="button" id="btn-add-inspiracion-cart">Agregar al carrito</button>
               </div>
+              <button class="button button--primary button--large" type="button" id="btn-send-inspiracion" style="width: 100%; margin-top: 1rem;">Enviar por WhatsApp</button>
             </div>
           </div>
         </div>
@@ -376,15 +374,13 @@
           <p class="featured-note">Camisa oversize y semi-oversize, con corte urbano y presencia. Muy pronto más piezas de la colección ZAYRO.</p>
         </div>
         <div class="product-grid">
-          <article class="product-card reveal">
+          <article class="product-card product-card--catalog reveal" data-product-id="zayro-camisa-coleccion">
             <div class="product-card__media">
               <img class="product-image product-image--front" src="assets/coleccion-1/CAMISA-DE-FRENTE.png" alt="Camisa ZAYRO frente" loading="lazy" />
               <img class="product-image product-image--back" src="assets/coleccion-1/CAMISA-TOMA-TRASERA.png" alt="Camisa ZAYRO detrás" loading="lazy" />
             </div>
             <div class="product-card__body">
-              <p class="card__label">COLECCIÓN</p>
-              <h3>Colección 01</h3>
-              <a href="https://api.whatsapp.com/send/?phone=573016731498&text&type=phone_number&app_absent=0&utm_source=ig">Consultar</a>
+              <button class="button product-cta" type="button">Ver producto</button>
             </div>
           </article>
         </div>
@@ -394,8 +390,7 @@
       <section class="section section--light" id="accesorios">
         <div class="section__heading reveal">
           <p class="eyebrow eyebrow--dark">ACCESORIOS</p>
-          <h2>Accesorios premium y exclusivos.</h2>
-          <p>Gorras, joyería, gafas, cintillos, balaclavas, bolsos y termos. Revisamos disponibilidad real antes de enviar para asegurar tu compra premium.</p>
+          <h2>Premium y exclusivos.</h2>
         </div>
         <div class="accessories-hero reveal">
           <div class="accessories-images">
@@ -403,9 +398,8 @@
             <div class="accessories-image" style="background-image: url('assets/acesorios/todo.png');"></div>
           </div>
           <div class="accessories-copy">
-            <p class="accessory-badge">Premium · Disponibilidad limitada</p>
-            <h3>Descubre accesorios que completan tu estilo.</h3>
-            <p>Estas piezas son premium y exclusivas, por eso confirmamos stock real antes de coordinar envío. Escribe por WhatsApp para preguntar disponibilidad o comprar.</p>
+            <p class="accessory-badge">Disponibilidad limitada</p>
+            <p>Gorras, joyería, gafas, cintillos, bolsos y termos. Confirma stock por WhatsApp.</p>
             <div class="accessories-actions">
               <a class="button button--primary" href="https://api.whatsapp.com/send/?phone=573016731498&text=Hola%20quiero%20preguntar%20disponibilidad%20de%20accesorios" target="_blank" rel="noreferrer">Preguntar disponibilidad</a>
               <a class="button button--ghost" href="https://api.whatsapp.com/send/?phone=573016731498&text=Hola%20quiero%20comprar%20accesorios" target="_blank" rel="noreferrer">Comprar</a>
@@ -566,15 +560,11 @@
             <h2 id="detail-title"></h2>
             <p class="detail-price" id="detail-price"></p>
             <p class="detail-status" id="detail-status"></p>
-
+            <p class="detail-hint" id="detail-hint"></p>
+            <div class="detail-variant" id="detail-variant" style="display:none;"></div>
             <div class="detail-section">
               <p class="detail-section-title">Descripción</p>
               <p id="detail-why"></p>
-            </div>
-
-            <div class="detail-notes" id="detail-notes">
-              <p class="detail-section-title">Notas olfativas</p>
-              <div class="notes-grid" id="notes-grid"></div>
             </div>
 
             <div class="detail-actions">
@@ -600,8 +590,14 @@
 
     <!-- Chat -->
     <div class="chat-widget" id="chat-widget">
-      <button class="chat-toggle" id="chat-toggle" aria-label="Abrir chat">
-        <span class="chat-icon">💬</span>
+      <button class="chat-toggle" id="chat-toggle" aria-label="Abrir asistente">
+        <span class="chat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4C4 2.89543 4.89543 2 6 2H18C19.1046 2 20 2.89543 20 4V14C20 15.1046 19.1046 16 18 16H13.586L10 19.586V16H6C4.89543 16 4 15.1046 4 14V4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 6H8M16 10H11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="chat-label">Atención al cliente</span>
       </button>
       <div class="chat-panel" id="chat-panel">
         <div class="chat-header">
