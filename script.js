@@ -1089,25 +1089,47 @@ function showInspirationStep(step) {
 }
 
 function getUniqueFrascos() {
-  const seenImages = new Set();
-  return Object.entries(FRASCOS).filter(([key, frasco]) => {
-    if (seenImages.has(frasco.imagen)) return false;
-    seenImages.add(frasco.imagen);
-    return true;
+  const groups = {};
+  Object.entries(FRASCOS).forEach(([key, frasco]) => {
+    const groupId = frasco.tipo || frasco.nombre;
+    if (!groups[groupId]) {
+      groups[groupId] = {
+        key,
+        nombre: frasco.nombre,
+        tipo: frasco.tipo,
+        imagenes: [],
+        frasco
+      };
+    }
+    groups[groupId].imagenes.push(frasco.imagen);
   });
+
+  return Object.values(groups).map(group => ({
+    key: group.key,
+    nombre: group.nombre,
+    tipo: group.tipo,
+    imagenes: Array.from(new Set(group.imagenes)),
+    frasco: group.frasco
+  }));
 }
 
 function renderFrascoGrid() {
   const grid = document.getElementById('frasco-grid');
   if (!grid) return;
-  grid.innerHTML = getUniqueFrascos().map(([key, frasco]) => `
-    <button type="button" class="frasco-card" data-frasco-key="${key}">
-      <img src="${frasco.imagen}" alt="${frasco.nombre}" loading="lazy" />
-      <div class="frasco-card-meta">
-        <span class="frasco-name">${frasco.nombre}</span>
-      </div>
-    </button>
-  `).join('');
+  grid.innerHTML = getUniqueFrascos().map(frasco => {
+    const images = frasco.imagenes.map(src => `<img src="${src}" alt="${frasco.nombre}" loading="lazy" />`).join('');
+    const cardClass = frasco.imagenes.length > 1 ? 'frasco-card multi-image' : 'frasco-card';
+    return `
+      <button type="button" class="${cardClass}" data-frasco-key="${frasco.key}">
+        <div class="frasco-card-image">
+          ${images}
+        </div>
+        <div class="frasco-card-meta">
+          <span class="frasco-name">${frasco.nombre}</span>
+        </div>
+      </button>
+    `;
+  }).join('');
 
   grid.querySelectorAll('.frasco-card').forEach(card => {
     const key = card.dataset.frascoKey;
@@ -1268,17 +1290,21 @@ Te envío la imagen directamente por WhatsApp cuando se abra el chat.`;
 function renderLandingFrascoHook() {
   const hook = document.getElementById('inspiracion-landing-grid');
   if (!hook) return;
-  const references = getUniqueFrascos().slice(0, 3);
-  hook.innerHTML = references.map(([key, frasco]) => `
-      <button type="button" class="inspiracion-landing-card" data-frasco-key="${key}">
+  const references = getUniqueFrascos().filter(frasco => frasco.tipo !== 'pequeño').slice(0, 3);
+  hook.innerHTML = references.map(frasco => {
+    const images = frasco.imagenes.map(src => `<img src="${src}" alt="${frasco.nombre}" loading="lazy" />`).join('');
+    const cardClass = frasco.imagenes.length > 1 ? 'inspiracion-landing-card multi-image' : 'inspiracion-landing-card';
+    return `
+      <button type="button" class="${cardClass}" data-frasco-key="${frasco.key}">
         <div class="card-image">
-          <img src="${frasco.imagen}" alt="${frasco.nombre}" loading="lazy" />
+          ${images}
         </div>
         <div class="card-info">
           <span>${frasco.nombre}</span>
         </div>
       </button>
-    `).join('');
+    `;
+  }).join('');
   hook.querySelectorAll('.inspiracion-landing-card').forEach(card => {
     card.addEventListener('click', () => {
       hook.querySelectorAll('.inspiracion-landing-card').forEach(c => c.classList.remove('selected'));
@@ -1473,7 +1499,11 @@ function initCatalogToggle() {
 
   const updateState = () => {
     const expanded = catalogWrap.classList.contains('expanded');
-    catalogWrap.classList.toggle('collapsed', !expanded);
+    if (expanded) {
+      catalogWrap.classList.remove('collapsed');
+    } else {
+      catalogWrap.classList.add('collapsed');
+    }
     toggleBtn.setAttribute('aria-expanded', String(expanded));
     if (label) {
       label.textContent = expanded ? 'Ver menos perfumes' : 'Ver más perfumes';
@@ -1481,8 +1511,16 @@ function initCatalogToggle() {
   };
 
   toggleBtn.addEventListener('click', () => {
-    catalogWrap.classList.toggle('expanded');
-    updateState();
+    const expanded = catalogWrap.classList.toggle('expanded');
+    if (expanded) {
+      catalogWrap.classList.remove('collapsed');
+    } else {
+      catalogWrap.classList.add('collapsed');
+    }
+    toggleBtn.setAttribute('aria-expanded', String(expanded));
+    if (label) {
+      label.textContent = expanded ? 'Ver menos perfumes' : 'Ver más perfumes';
+    }
   });
 
   updateState();
