@@ -29,17 +29,6 @@
         <a href="#accesorios">ACCESORIOS</a>
         <a class="nav-cta" href="https://api.whatsapp.com/send/?phone=573016731498&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" rel="noreferrer">Escríbenos</a>
       </nav>
-      <button class="cart-toggle" id="cart-toggle" aria-label="Abrir carrito" title="Abrir carrito">
-        <span class="cart-icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 4H5V6H7V4ZM8 6L9.5 12H19V14H9.95L8.7 17.47C8.64 17.69 8.45 17.84 8.22 17.84H6C5.72 17.84 5.5 17.62 5.5 17.34C5.5 17.06 5.72 16.84 6 16.84H7.15L8.4 13.37L6.2 9H4V7H6.1L7 4Z" fill="currentColor" />
-            <circle cx="9" cy="20" r="1.5" fill="currentColor" />
-            <circle cx="17" cy="20" r="1.5" fill="currentColor" />
-          </svg>
-        </span>
-        <span class="cart-label">CARRITO</span>
-        <span class="cart-count" id="cart-count">0</span>
-      </button>
     </header>
 
     <div class="cart-sidebar" id="cart-sidebar" aria-label="Carrito de compras">
@@ -372,10 +361,12 @@
           <p class="eyebrow">COLECCIÓN</p>
           <h2>Colección 01</h2>
           <p class="featured-note">Camisa oversize y semi-oversize, con corte urbano y presencia. Muy pronto más piezas de la colección ZAYRO.</p>
+          <div class="featured-promo">Promoción 20% OFF en Colección 01 — descuento aplicado automáticamente</div>
         </div>
         <div class="product-grid">
           <article class="product-card product-card--catalog reveal" data-product-id="zayro-camisa-coleccion">
             <div class="product-card__media">
+              <div class="product-card__badge">20% OFF</div>
               <img class="product-image product-image--front" src="assets/coleccion-1/CAMISA-DE-FRENTE.png" alt="Camisa ZAYRO frente" loading="lazy" />
               <img class="product-image product-image--back" src="assets/coleccion-1/CAMISA-TOMA-TRASERA.png" alt="Camisa ZAYRO detrás" loading="lazy" />
             </div>
@@ -398,11 +389,9 @@
             <div class="accessories-image" style="background-image: url('assets/acesorios/todo.png');"></div>
           </div>
           <div class="accessories-copy">
-            <p class="accessory-badge">Disponibilidad limitada</p>
             <p>Gorras, joyería, gafas, cintillos, bolsos y termos. Confirma stock por WhatsApp.</p>
             <div class="accessories-actions">
               <a class="button button--primary" href="https://api.whatsapp.com/send/?phone=573016731498&text=Hola%20quiero%20preguntar%20disponibilidad%20de%20accesorios" target="_blank" rel="noreferrer">Preguntar disponibilidad</a>
-              <a class="button button--ghost" href="https://api.whatsapp.com/send/?phone=573016731498&text=Hola%20quiero%20comprar%20accesorios" target="_blank" rel="noreferrer">Comprar</a>
             </div>
           </div>
         </div>
@@ -412,15 +401,14 @@
       <section class="section section--dark" id="shipping">
         <div class="section__heading reveal">
           <p class="eyebrow">PAGOS · ENVÍOS</p>
-          <h2>Comodidad y cobertura nacional.</h2>
+          <h2>Envíos seguros y entrega a domicilio.</h2>
         </div>
         <div class="payment-wrap reveal">
-          <div class="payment-chips">
-            <span>Nequi</span>
-            <span>Llaves</span>
-            <span>WhatsApp</span>
+          <div class="shipping-copy">
+            <p class="shipping-subtitle">Envíos seguros</p>
+            <p>Empacamos cada pedido con cuidado premium y enviamos a domicilio en toda Colombia. Desde nuestra bodega en Sabanalarga, Atlántico, tus paquetes viajan con seguimiento y protección hasta tu puerta.</p>
+            <p>Sin importar dónde estés en Colombia, te entregamos directamente a tu casa con el servicio más confiable.</p>
           </div>
-          <p>Envíos nacionales a toda Colombia con seguimiento claro.</p>
         </div>
       </section>
 
@@ -559,6 +547,7 @@
             <p class="detail-brand" id="detail-brand"></p>
             <h2 id="detail-title"></h2>
             <p class="detail-price" id="detail-price"></p>
+            <p class="detail-old-price" id="detail-old-price"></p>
             <p class="detail-status" id="detail-status"></p>
             <p class="detail-hint" id="detail-hint"></p>
             <div class="detail-variant" id="detail-variant" style="display:none;"></div>
@@ -597,7 +586,6 @@
             <path d="M16 6H8M16 10H11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
-        <span class="chat-label">Atención al cliente</span>
       </button>
       <div class="chat-panel" id="chat-panel">
         <div class="chat-header">
