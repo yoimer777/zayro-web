@@ -1171,6 +1171,45 @@ a:focus-visible {
   gap: 0.8rem;
 }
 
+.faq-list.collapsed .faq-item:nth-child(n+4) {
+  display: none;
+}
+
+.faq-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.75rem;
+}
+
+.faq-actions .button {
+  min-width: 220px;
+  width: max-content;
+  padding: 1rem 1.4rem;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--zayro-black);
+  border: 1px solid rgba(11, 11, 10, 0.14);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.faq-actions .button:hover {
+  background: #f5f3ef;
+  transform: translateY(-1px);
+}
+
+.faq-actions .button:focus-visible {
+  outline: 3px solid rgba(184, 145, 90, 0.35);
+  outline-offset: 3px;
+}
+
+.faq-actions .button[aria-expanded="true"] {
+  background: #111;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+}
+
 .faq-item {
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: var(--radius);
@@ -1321,6 +1360,35 @@ a:focus-visible {
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+/* Center catalog note and make it responsive */
+.catalog-note {
+  max-width: var(--container);
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--zayro-black);
+}
+
+@media (max-width: 760px) {
+  .catalog-note {
+    padding: 0 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Hide the first frasco (Frasco Portátil) in the inspiration modal as requested */
+.modal--inspiracion #frasco-grid .frasco-card:first-child {
+  display: none;
+}
+
+/* Ensure frasco grid centers its items on small screens */
+#frasco-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  justify-items: center;
 }
 
 /* ===== CART ===== */
