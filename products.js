@@ -365,7 +365,7 @@ const PRODUCTS = {
       "assets/coleccion-1/CAMISA-TOMA-TRASERA.png"
     ],
     why: "Camisa de algodón premium con estampado exclusivo. Disponible en corte semi oversize y oversize.",
-    description: "Algodón premium y estampado premium. Corte urbano con presencia para un look potente.",
+    description: "Algodón premium y estampado premium. Corte urbano con presencia para un look potente. Este diseño nace de la pureza minimalista de ZAYRO, inspirado en calles urbanas y texturas limpias. Surge con la esencia de la marca: presencia discreta, actitud sutil y libertad para expresar el estilo propio. Lo presentamos en semi oversize y oversize para que cualquier cuerpo pueda colársela; unisex, pensado para hombres y mujeres que buscan porte sin estridencias.",
     notes: null
   }
 };

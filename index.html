@@ -37,21 +37,23 @@
         <button class="cart-close" id="cart-close" aria-label="Cerrar carrito">×</button>
       </div>
       <div class="cart-body">
+        <div class="cart-total cart-total--top">
+          <span>Subtotal</span>
+          <strong id="cart-subtotal-top">—</strong>
+        </div>
         <section class="cart-items" id="cart-items">
           <p class="cart-empty">El carrito está vacío.</p>
         </section>
+
+        <button class="button button--ghost" id="cart-continue-shopping-btn">Seguir comprando</button>
       </div>
       <div class="cart-footer">
         <div class="cart-promo">
           <strong>Tu pedido se gestiona en minutos</strong>
           <p>Asesoría rápida, seguimiento claro y envío nacional.</p>
         </div>
-        <div class="cart-total">
-          <span>Subtotal</span>
-          <strong id="cart-subtotal">—</strong>
-        </div>
-        <button class="button button--primary" id="cart-confirm-btn" disabled>Enviar pedido por WhatsApp</button>
-        <button class="button button--ghost" id="cart-continue-shopping-btn">Seguir comprando</button>
+        <button class="button button--primary" id="cart-pay-button" type="button">Pagar con Nequi / Bre-B</button>
+        <button class="button button--ghost" id="cart-confirm-btn" aria-label="Enviar pedido por WhatsApp">Enviar pedido por WhatsApp</button>
       </div>
     </div>
 
@@ -82,6 +84,97 @@
               <button class="button button--primary" id="checkout-send-btn" type="submit">Enviar por WhatsApp</button>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="payment-gateway-modal" id="payment-gateway-modal" aria-hidden="true">
+      <div class="payment-gateway-modal__backdrop" data-close-payment-modal="true"></div>
+      <div class="payment-gateway-modal__panel" role="dialog" aria-modal="true" aria-labelledby="payment-gateway-title" tabindex="-1">
+        <button class="payment-gateway-modal__close" id="payment-gateway-close" aria-label="Cerrar">×</button>
+
+        <div class="payment-gateway-header">
+          <h2 id="payment-gateway-title">Pagar pedido</h2>
+          <p class="payment-gateway-subtitle">Completa tus datos, elige el método de pago y confirma el pedido por WhatsApp.</p>
+        </div>
+
+        <div class="payment-gateway-body" id="payment-flow">
+          <div class="payment-customer-fields">
+            <label class="checkout-field">
+              <span>Nombre</span>
+              <input type="text" id="payment-customer-name" name="payment-name" placeholder="Tu nombre" />
+            </label>
+            <label class="checkout-field">
+              <span>Ciudad</span>
+              <input type="text" id="payment-customer-city" name="payment-city" placeholder="Ciudad o región" />
+            </label>
+          </div>
+
+          <div class="cart-payment-methods" role="radiogroup" aria-label="Metodos de pago">
+            <label class="payment-method-option">
+              <input type="radio" name="payment-method" value="nequi" checked />
+              <span>Nequi</span>
+            </label>
+            <label class="payment-method-option">
+              <input type="radio" name="payment-method" value="breb" />
+              <span>Bre-B</span>
+            </label>
+
+          </div>
+
+          <div class="cart-payment-preview" id="cart-payment-preview">
+            <p class="cart-payment-preview__title">Pago por Nequi</p>
+            <p><strong>Monto exacto:</strong> <span id="payment-amount-preview">—</span></p>
+            <p><strong>Cuenta:</strong> <span id="payment-account-preview">3016731498</span></p>
+            <div class="cart-payment-qr">
+              <img src="assets/QR/QR.png" alt="Codigo QR para pago" loading="lazy" />
+            </div>
+          </div>
+
+          <label class="payment-terms">
+            <input type="checkbox" id="payment-terms" />
+            <span>Acepto los terminos y entiendo que el pedido se confirma una vez verifiquemos el pago.</span>
+          </label>
+
+          <button class="button button--primary" id="payment-submit-btn" type="button">Confirmar y enviar por WhatsApp</button>
+          <p class="cart-payment-message" id="cart-payment-message" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="payment-gateway-actions">
+          <button class="button button--ghost" data-close-payment-modal="true">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="payment-gateway-modal" id="payment-confirm-modal" aria-hidden="true">
+      <div class="payment-gateway-modal__backdrop" data-close-payment-modal="true"></div>
+      <div class="payment-gateway-modal__panel" role="dialog" aria-modal="true" aria-labelledby="payment-confirm-title" tabindex="-1">
+        <button class="payment-gateway-modal__close" id="payment-confirm-close" aria-label="Cerrar">×</button>
+        <div class="payment-gateway-header">
+          <h2 id="payment-confirm-title">Solicitud enviada</h2>
+          <p class="payment-gateway-subtitle">Hemos recibido tu solicitud de pago y te contactaremos pronto para confirmar.</p>
+        </div>
+        <div class="payment-gateway-body">
+          <div class="payment-receipt">
+            <div class="receipt-item">
+              <span>Método de pago</span>
+              <strong id="payment-method-receipt">—</strong>
+            </div>
+            <div class="receipt-item">
+              <span>Monto</span>
+              <strong id="payment-amount-receipt">—</strong>
+            </div>
+            <div class="receipt-item receipt-item--separator">
+              <span>Estado</span>
+              <strong>Pendiente de verificación</strong>
+            </div>
+          </div>
+          <div class="receipt-message">
+            <p>El pedido se confirma una vez que verifiquemos el pago. Te enviaremos un mensaje por WhatsApp con la confirmación y los pasos a seguir.</p>
+          </div>
+        </div>
+        <div class="payment-gateway-actions">
+          <button class="button button--primary" id="payment-confirm-close-btn" type="button">Cerrar</button>
         </div>
       </div>
     </div>
@@ -418,7 +511,7 @@
           <p class="eyebrow eyebrow--dark">FAQ</p>
           <h2>Preguntas frecuentes.</h2>
         </div>
-        <div class="faq-list">
+        <div class="faq-list collapsed">
           <article class="faq-item reveal">
             <button class="faq-question" aria-expanded="false">¿Los perfumes son originales?<span>+</span></button>
             <div class="faq-answer"><p>Trabajamos con fragancias originales 100 % auténticas de marcas de diseñador y de nicho, así como inspiraciones de alta concentración con esencias premium. Cada producto indica claramente su categoría.</p></div>
@@ -460,35 +553,11 @@
             <div class="faq-answer"><p>Si no encuentras la fragancia que deseas en nuestro catálogo, puedes solicitar una inspiración personalizada o escribirnos por WhatsApp. Trabajamos con una amplia variedad de esencias y podemos evaluar tu solicitud.</p></div>
           </article>
         </div>
-      </section>
-
-      <!-- CLIENTES QUE CONFIAR -->
-      <section class="section section--dark" id="confianza">
-        <div class="section__heading reveal">
-          <p class="eyebrow">CONFIANZA</p>
-          <h2>Clientes que confían en ZAYRO.</h2>
+        <div class="faq-actions reveal">
+          <button class="button button--ghost" id="faq-toggle-btn" type="button" aria-expanded="false">
+            <span class="faq-toggle-label">Ver más preguntas</span>
+          </button>
         </div>
-        <div class="metrics-grid reveal">
-          <div class="metric-card">
-            <span class="metric-number" data-target="2500">0</span>
-            <span class="metric-label">Consultas atendidas</span>
-          </div>
-          <div class="metric-card">
-            <span class="metric-number" data-target="1000">0</span>
-            <span class="metric-label">Pedidos gestionados</span>
-          </div>
-          <div class="metric-card">
-            <span class="metric-number" data-target="20">0</span>
-            <span class="metric-label">Ciudades con cobertura</span>
-          </div>
-          <div class="metric-card">
-            <span class="metric-number" data-target="365">0</span>
-            <span class="metric-label">Días de atención al año</span>
-          </div>
-        </div>
-        <p class="metrics-testimonial reveal">
-          Cada consulta es atendida de forma personalizada para ayudarte a encontrar la mejor opción según tus gustos y necesidades.
-        </p>
       </section>
 
       <!-- CTA -->

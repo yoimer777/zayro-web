@@ -254,11 +254,19 @@ function renderThumbnails(product) {
 
 function updateProductVariant() {
   if (currentProductCut && currentProductSize) {
+    const basePrice = currentProductCut.basePrice;
+    const surcharge = currentProductSize.surcharge;
+    const originalPrice = basePrice + surcharge;
+    const isCollectionDiscount = currentProductId === 'zayro-camisa-coleccion' || (PRODUCTS[currentProductId] && PRODUCTS[currentProductId].label === 'Colección');
+    const discountedPrice = isCollectionDiscount ? Math.round(originalPrice * 0.8) : originalPrice;
+
     currentProductVariant = {
       label: `${currentProductCut.label} · ${currentProductSize.label}`,
-      basePrice: currentProductCut.basePrice,
-      surcharge: currentProductSize.surcharge,
-      price: currentProductCut.basePrice + currentProductSize.surcharge
+      basePrice,
+      surcharge,
+      originalPrice,
+      price: discountedPrice,
+      discount: isCollectionDiscount ? 20 : 0
     };
   } else {
     currentProductVariant = null;
@@ -266,14 +274,35 @@ function updateProductVariant() {
 
   const priceEl = document.getElementById('detail-price');
   const statusEl = document.getElementById('detail-status');
+  const hintEl = document.getElementById('detail-hint');
+
+  const oldPriceEl = document.getElementById('detail-old-price');
 
   if (priceEl) {
     priceEl.textContent = currentProductVariant ? formatCurrency(currentProductVariant.price) : 'Bajo encargo';
+  }
+  if (oldPriceEl) {
+    if (currentProductVariant && currentProductVariant.discount) {
+      oldPriceEl.textContent = formatCurrency(currentProductVariant.originalPrice);
+      oldPriceEl.style.display = 'block';
+    } else {
+      oldPriceEl.textContent = '';
+      oldPriceEl.style.display = 'none';
+    }
   }
   if (statusEl) {
     statusEl.textContent = currentProductVariant
       ? `Corte ${currentProductCut.label} · Talla ${currentProductSize.label}`
       : '';
+  }
+  if (hintEl) {
+    if (currentProductVariant && currentProductVariant.discount) {
+      hintEl.textContent = `20% OFF aplicado automáticamente en Colección 01`;
+    } else if (currentProductId && PRODUCTS[currentProductId] && PRODUCTS[currentProductId].cuts && PRODUCTS[currentProductId].sizes) {
+      hintEl.textContent = '2XL y 3XL tienen costo adicional. Te asesoramos por WhatsApp.';
+    } else {
+      hintEl.textContent = '';
+    }
   }
 }
 
@@ -363,8 +392,8 @@ document.getElementById('detail-add-cart')?.addEventListener('click', () => {
       name: product.name,
       category: product.label || 'Sin categoría',
       brand: product.brand || 'ZAYRO',
-      price: currentProductVariant && currentProductVariant.price ? currentProductVariant.price : 0,
-      status: currentProductVariant && currentProductVariant.price ? 'Disponible' : 'Bajo encargo',
+      price: currentProductVariant && currentProductVariant.price ? currentProductVariant.price : (product.price || 0),
+      status: currentProductVariant && currentProductVariant.price ? 'Disponible' : (product.price ? 'Disponible' : 'Bajo encargo'),
       description: product.description || product.why || '',
       image: product.image,
       quantity: 1,
@@ -418,6 +447,8 @@ function initProductCards() {
 const CART_STORAGE_KEY = 'zayro-cart';
 const WA_PHONE = '573016731498';
 const CUSTOMER_STORAGE_KEY = 'zayro-cart-customer';
+
+function formatCurrency(amount) { return '$' + amount.toLocaleString('es-CO'); }
 
 const cartState = {
   items: [],
@@ -529,8 +560,6 @@ const cartState = {
   updateUI() { updateCartCount(); renderCart(); }
 };
 
-function formatCurrency(amount) { return '$' + amount.toLocaleString('es-CO'); }
-
 function renderCartNotification(message) {
   const notif = document.createElement('div');
   notif.className = 'notification';
@@ -559,6 +588,7 @@ function updateCategoryUI() {
 function renderCart() {
   updateCartCount();
   updateCategoryUI();
+  updateCartSubtotals();
   const cartItems = document.getElementById('cart-items');
   if (!cartItems) return;
   if (!cartState.hasItems()) {
@@ -725,6 +755,165 @@ function submitCheckoutModal(event) {
   closeCheckoutModal();
 }
 
+function updateCartSubtotals() {
+  const subtotalTop = document.getElementById('cart-subtotal-top');
+  if (subtotalTop) {
+    if (cartState.hasConsultItems()) {
+      subtotalTop.textContent = 'Consultar con asesor';
+    } else {
+      subtotalTop.textContent = formatCurrency(cartState.getTotal());
+    }
+  }
+}
+
+function updateManualPaymentSummary() {
+  const preview = document.getElementById('cart-payment-preview');
+  const title = preview?.querySelector('.cart-payment-preview__title');
+  const amount = document.getElementById('payment-amount-preview');
+  const account = document.getElementById('payment-account-preview');
+  const selected = document.querySelector('input[name="payment-method"]:checked')?.value || 'nequi';
+
+  if (!preview || !title || !amount || !account) return;
+
+  if (selected === 'nequi') {
+    title.textContent = 'Pago por Nequi';
+    amount.textContent = cartState.hasConsultItems() ? 'Consultar con asesor' : formatCurrency(cartState.getTotal());
+    account.textContent = '3016731498';
+  } else if (selected === 'breb') {
+    title.textContent = 'Pago por Bre-B';
+    amount.textContent = cartState.hasConsultItems() ? 'Consultar con asesor' : formatCurrency(cartState.getTotal());
+    account.textContent = '0092701119';
+  } else {
+    title.textContent = 'Pago por WhatsApp';
+    amount.textContent = cartState.hasConsultItems() ? 'Consultar con asesor' : formatCurrency(cartState.getTotal());
+    account.textContent = 'Asesoría directa';
+  }
+}
+
+function setManualPaymentMessage(message, isError = false) {
+  const el = document.getElementById('cart-payment-message');
+  if (!el) return;
+  el.textContent = message;
+  el.classList.toggle('is-error', isError);
+}
+
+function buildManualPaymentMessage() {
+  const name = cartState.customer?.name || 'No indicado';
+  const city = cartState.customer?.city || 'No indicado';
+  const method = document.querySelector('input[name="payment-method"]:checked')?.value || 'nequi';
+  const methodLabel = method === 'nequi' ? 'Nequi' : (method === 'breb' ? 'Bre-B' : 'WhatsApp');
+  const total = cartState.hasConsultItems() ? 'por confirmar' : formatCurrency(cartState.getTotal());
+  const lines = [
+    'Hola, equipo de ZAYRO.',
+    '',
+    'Nuevo pago manual recibido.',
+    '',
+    'Pedido:',
+    ...cartState.items.map(item => `- ${item.name} x${item.quantity}`),
+    '',
+    'Metodo de pago:',
+    `- ${methodLabel}`,
+    `- Monto: ${total}`,
+    '',
+    'Datos del cliente:',
+    `- Nombre: ${name}`,
+    `- Ciudad: ${city}`,
+    '',
+    'En breve nos contactaremos para confirmar el pago y coordinar el envio. Gracias.'
+  ];
+
+  return lines.join('\n');
+}
+
+function closePaymentModal(modalId) {
+  const modal = document.getElementById(modalId || 'payment-gateway-modal');
+  if (!modal) return;
+  modal.classList.remove('is-open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+
+function openPaymentModal() {
+  const modal = document.getElementById('payment-gateway-modal');
+  if (!modal) return;
+  const customer = cartState.customer || {};
+  document.getElementById('payment-customer-name').value = customer.name || '';
+  document.getElementById('payment-customer-city').value = customer.city || '';
+  document.getElementById('payment-terms').checked = false;
+  setManualPaymentMessage('');
+  updateManualPaymentSummary();
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+function handleManualPaymentSubmit() {
+  if (!cartState.hasItems()) {
+    setManualPaymentMessage('Agrega productos al carrito antes de enviar el pago.', true);
+    return;
+  }
+
+  const name = document.getElementById('payment-customer-name')?.value.trim();
+  const city = document.getElementById('payment-customer-city')?.value.trim();
+  if (!name || !city) {
+    setManualPaymentMessage('Completa tu nombre y ciudad antes de continuar.', true);
+    return;
+  }
+
+  cartState.customer = cartState.customer || {};
+  cartState.customer.name = name;
+  cartState.customer.city = city;
+
+  const termsChecked = document.getElementById('payment-terms')?.checked;
+  if (!termsChecked) {
+    setManualPaymentMessage('Debes aceptar los terminos antes de enviar el pago.', true);
+    return;
+  }
+
+  const message = buildManualPaymentMessage();
+  const url = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+  closePaymentModal('payment-gateway-modal');
+
+  const confirmModal = document.getElementById('payment-confirm-modal');
+  if (confirmModal) {
+    const method = document.querySelector('input[name="payment-method"]:checked')?.value || 'nequi';
+    const methodLabel = method === 'nequi' ? 'Nequi' : (method === 'breb' ? 'Bre-B' : 'WhatsApp');
+    const amount = cartState.hasConsultItems() ? 'por confirmar' : formatCurrency(cartState.getTotal());
+    document.getElementById('payment-method-receipt').textContent = methodLabel;
+    document.getElementById('payment-amount-receipt').textContent = amount;
+    confirmModal.classList.add('is-open');
+    confirmModal.setAttribute('aria-hidden', 'false');
+  }
+}
+
+function initManualPaymentFlow() {
+  document.querySelectorAll('input[name="payment-method"]').forEach(input => {
+    input.addEventListener('change', updateManualPaymentSummary);
+  });
+
+  document.getElementById('payment-submit-btn')?.addEventListener('click', handleManualPaymentSubmit);
+  document.getElementById('cart-pay-button')?.addEventListener('click', openPaymentModal);
+  document.getElementById('payment-gateway-close')?.addEventListener('click', () => closePaymentModal('payment-gateway-modal'));
+  document.getElementById('payment-confirm-close')?.addEventListener('click', () => closePaymentModal('payment-confirm-modal'));
+  document.getElementById('payment-confirm-close-btn')?.addEventListener('click', () => closePaymentModal('payment-confirm-modal'));
+
+  document.querySelectorAll('[data-close-payment-modal]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      const modal = e.target.closest('.payment-gateway-modal');
+      if (modal) closePaymentModal(modal.id);
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      document.querySelectorAll('.payment-gateway-modal.is-open').forEach(m => {
+        closePaymentModal(m.id);
+      });
+    }
+  });
+
+  updateManualPaymentSummary();
+}
+
 function initCart() {
   document.getElementById('cart-toggle')?.addEventListener('click', openCartSidebar);
   document.getElementById('floating-cart-toggle')?.addEventListener('click', openCartSidebar);
@@ -740,6 +929,7 @@ function initCart() {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeCheckoutModal();
   });
+  initManualPaymentFlow();
   renderCart();
 }
 
@@ -760,6 +950,22 @@ function initFaqAccordion() {
       button.setAttribute('aria-expanded', String(willOpen));
     });
   });
+
+  const faqToggleBtn = document.querySelector('#faq-toggle-btn');
+  const faqList = document.querySelector('.faq-list');
+  const faqLabel = faqToggleBtn?.querySelector('.faq-toggle-label');
+
+  if (faqToggleBtn && faqList && faqLabel) {
+    const initialCollapsed = faqList.classList.contains('collapsed');
+    faqToggleBtn.setAttribute('aria-expanded', String(!initialCollapsed));
+    faqLabel.textContent = initialCollapsed ? 'Ver más preguntas' : 'Ver menos preguntas';
+
+    faqToggleBtn.addEventListener('click', () => {
+      const collapsedAfterToggle = faqList.classList.toggle('collapsed');
+      faqToggleBtn.setAttribute('aria-expanded', String(!collapsedAfterToggle));
+      faqLabel.textContent = collapsedAfterToggle ? 'Ver más preguntas' : 'Ver menos preguntas';
+    });
+  }
 }
 
 // ========== CHAT ==========

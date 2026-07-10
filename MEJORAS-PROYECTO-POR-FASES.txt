@@ -1,0 +1,187 @@
+ZAYRO - Mejora del proyecto por fases
+
+Objetivo: organizar las mejoras necesarias en la tienda para pasar de un flujo WhatsApp/manual a un flujo de pago/orden más profesional, sin romper la experiencia actual.
+
+RESTRICCIONES IMPORTANTES
+------------------------
+- No se debe dañar lo que ya está funcionando actualmente.
+- No eliminar el flujo de WhatsApp mientras se integra o prueba el pago directo.
+- Sólo agregar, no reemplazar; primero añadir el nuevo comportamiento y después validar su funcionamiento.
+- Si algo está bien hecho, se mantiene tal cual; los cambios deben ser incrementales.
+- Probar cada cambio en desktop y móvil antes de avanzar a la siguiente fase.
+- Evitar uso de términos de facturación o cliente en la interfaz hasta que la operación esté legalmente habilitada.
+- No presentar el sitio como un emisor de factura electrónica hasta tener RUT y facturación formal activada.
+
+ESPECIFICACIÓN TÉCNICA OFICIAL V3.0
+-----------------------------------
+- Actuar como arquitectura incremental: no romper nada, no eliminar flujos existentes.
+- Mantener el flujo actual de WhatsApp mientras se agregan nuevas opciones.
+- Preparar la tienda para un e-commerce profesional con módulos que se puedan activar después.
+- Todo debe funcionar en Desktop, Tablet y Mobile.
+- El checkout, pagos y envíos deben quedar desacoplados para futuras integraciones.
+
+REQUISITOS CLAVE:
+- Checkout profesional con resumen de pedido, datos de cliente, envío, pago y aceptación de términos.
+- Checkout completo con: productos, imagen, cantidad, precio unitario, descuentos, subtotal, envío, total, dirección, ciudad, departamento, barrio, referencias, método de envío, método de pago, observaciones y casilla obligatoria de términos.
+- Método de pago manual integrado con Nequi, Bre-B y WhatsApp.
+- Pago con comprobante: soporte visual para QR, monto exacto, y subida de comprobante en JPG, PNG, JPEG, WEBP y PDF.
+- QR cargado desde carpeta configurable (`/assets/qr/` o `/public/qr/`), no embebido en el código.
+- Estados de pedido completos: pendiente, pendiente de verificación, pago aprobado, pago rechazado, preparando pedido, empacado, despachado, en tránsito, entregado, cancelado, reembolsado.
+- Envío inteligente: envío gratis para Sabanalarga / Atlántico y cálculo automático para el resto de Colombia.
+- Base para futuras transportadoras (Servientrega, Coordinadora, Inter Rapidísimo, Envía) sin modificar el checkout.
+- Pago contra entrega condicional según cobertura de transportadora y municipio.
+- Confirmación de pedido profesional con número, fecha, hora, estado, productos, métodos de pago y envío, valor de envío, total y próximos pasos.
+- Seguimiento posterior con número de guía, transportadora, estado, historial y fechas.
+- Mensajes automáticos de estado por WhatsApp en cada cambio.
+- Políticas obligatorias accesibles desde footer y checkout.
+- Indicadores de confianza, seguridad y rendimiento.
+
+FASE 1: PAGO DIRECTO + POLÍTICAS
+--------------------------------
+1. Evaluar y elegir proveedor de pago
+   - Opciones recomendadas: Stripe Payment Links, MercadoPago Link, Nequi Checkout.
+   - Preferir solución que no requiera backend complejo si es posible.
+   - Mantener WhatsApp como alternativa de pago y asesoría.
+
+2. Diseñar la interfaz de pago
+   - Agregar botón visible: "Pagar aquí" o "Pagar con Link".
+   - Mantener botón secundario: "Pagar por WhatsApp".
+   - Mostrar precio total del carrito claramente antes de pagar.
+   - Añadir zona de resumen de pedido / pedido listo para pagar.
+   - Incluir selección de método: Nequi, Bre-B y WhatsApp.
+   - Para Nequi y Bre-B mostrar:
+     * monto exacto del pedido,
+     * número de pago,
+     * QR cargado desde carpeta configurable (`/assets/qr/` o `/public/qr/`),
+     * botón "Pagar con Nequi" o "Pagar mediante Bre-B".
+   - Después del pago manual mostrar botón "Ya realicé el pago" y permitir subir comprobante.
+   - No incluir imagen QR embebida en el código.
+
+3. Implementar el flujo de pago
+   - Si se usa link de pago: generar URL y abrir en nueva pestaña.
+   - Si se usa pasarela embebida: integrar frontend mínimo y redirigir al checkout seguro.
+   - Registrar estado del pedido localmente (por ejemplo, "Pago en proceso").
+   - Validar datos obligatorios del cliente antes de iniciar pago.
+   - Validar la casilla de aceptación de términos antes de finalizar.
+   - Para pago manual con Nequi/Bre-B:
+     * permitir subir comprobante JPG, PNG, JPEG, WEBP y PDF,
+     * no aceptar comprobante vacío,
+     * guardar archivo, fecha, hora, método de pago y estado,
+     * evitar pedidos duplicados.
+   - Mantener el flujo de WhatsApp actual como opción completa y sin cambios.
+   - El mensaje de WhatsApp debe incluir productos, cantidades, precio, subtotal, envío, total, nombre, celular, dirección, ciudad y observaciones.
+
+4. Definir y publicar políticas obligatorias
+   - Política de pagos: métodos aceptados, cuándo se considera pago recibido, que el sitio no procesa pagos internamente (si aplica), comisiones y devoluciones.
+   - Política de envíos: tiempos, cobertura, transportadora, y envío gratis en Sabanalarga / Atlántico.
+   - Política de cambios y devoluciones: plazos, personalización y casos de no devolución.
+   - Política de privacidad: datos que se recogen, uso de WhatsApp, no almacenamiento de datos financieros en el sitio.
+   - Términos de servicio: cómo se gestiona el pedido, validación y aprobación final.
+   - Mensaje legal en checkout/WhatsApp: “El pedido se confirma una vez que el pago sea verificado”.
+
+5. Ajustes técnicos mínimos
+   - Si se agrega pago directo, revisar `checkout-modal` y el flujo de carrito existente.
+   - No eliminar el mecanismo actual de WhatsApp; debe funcionar como fallback.
+   - Probar el nuevo botón en desktop y móvil.
+   - Mantener las cargas de comprobante y los pedidos manuales separados del checkout actual.
+
+6. Datos iniciales requeridos para fase 1
+   - Número Nequi: `3016731498`.
+   - Llave Bre-B: `0092701119`.
+   - QR para Nequi/Bre-B deberá ubicarse en `/assets/qr/`.
+   - Mantener WhatsApp como fallback obligado.
+
+7. Restricciones de la fase 1
+   - No borrar ni reemplazar el checkout actual.
+   - No quitar el flujo de comunicación por WhatsApp.
+   - No embutir el QR en el código; siempre debe cargarse desde la carpeta de assets.
+   - No permitir finalizar pedido sin términos aceptados.
+
+Entregables fase 1:
+   - `index.html` actualizado con CTA de pago directo.
+   - `script.js` con el flujo de pago permanente y fallback WhatsApp.
+   - `terminos.html` / `privacidad.html` con políticas completas.
+   - Documento de políticas escrito y disponible.
+
+FASE 2: ENVÍOS Y CONFIRMACIÓN DE PEDIDOS
+--------------------------------------
+1. Agregar información de envíos claros
+   - Mostrar opciones: domicilio, punto de encuentro, envíos nacionales.
+   - Definir tiempos de entrega estimados.
+   - Incluir costos de envío o nota de cálculo manual.
+
+2. Mejorar la confirmación de pedido
+   - Crear pantalla de “Pedido recibido” o modal tras confirmar el pago/WhatsApp.
+   - Incluir resumen de productos, valores, datos de cliente y próximos pasos.
+   - Envío de confirmación por WhatsApp/Email si se dispone.
+
+3. Automatizar seguimiento interno
+   - Registrar pedidos en algún sistema simple: Google Sheets, Airtable o CSV.
+   - Incluir estado de pedido: pendiente, pendiente de verificación, pago aprobado, pago rechazado, preparando pedido, empacado, despachado, en tránsito, entregado, cancelado, reembolsado.
+   - Si se usa WhatsApp, guardar el texto exacto del mensaje.
+
+4. Documentar procesos de envío
+   - Instrucciones internas para generar guías.
+   - Valores de transporte y tiempos por ciudad.
+   - Contactos de la transportadora.
+
+Entregables fase 2:
+   - UI de envío en checkout.
+   - Confirmación de pedido con resumen.
+   - Proceso documentado para registrar pedidos.
+
+FASE 3: GUIAS DE TRANSPORTADORA Y NOTIFICACIONES
+----------------------------------------------
+1. Agregar envío de guía al cliente
+   - Tras generar la guía, enviar el número o enlace por WhatsApp.
+   - Incluir texto automático: “Tu guía de transporte es: ...”.
+
+2. Control de estado de envío
+   - Añadir campo de seguimiento: “En tránsito”, “Entregado”.
+   - Registrar fecha de envío y número de guía.
+
+3. Automatizaciones recomendadas
+   - Usar Google Sheets/Airtable + Zapier/Make.com para:
+     * notificar al vendedor de cada pedido nuevo,
+     * actualizar estado cuando se genere la guía,
+     * enviar mensaje al cliente cuando el pedido se envía.
+   - Si se requiere, agregar endpoint serverless en Vercel para recibir eventos.
+
+4. Revisión de documentación legal
+   - Actualizar términos con la política de envíos y guías.
+   - Aclarar responsabilidad durante el transporte.
+
+Entregables fase 3:
+   - Proceso de envío con guía activo.
+   - Comunicación estandarizada de tracking al cliente.
+   - Integración de automatización básica.
+
+FASE 4: MEJORAS ADICIONALES Y PULIDO
+-----------------------------------
+1. UX/Conversion
+   - Optimizar botones y CTA.
+   - Agregar mensajes de confianza: “Pago seguro”, “WhatsApp disponible”.
+   - Mejorar texto de producto y precios.
+
+2. SEO y redes
+   - Añadir meta tags Open Graph y schema.org de producto.
+   - Optimizar imágenes y textos.
+
+3. Reportes y métricas
+   - Registrar conversiones / clicks de pago.
+   - Medir qué opción usan más los clientes (WhatsApp vs pago directo).
+
+4. Soporte interno
+   - Crear plantilla de WhatsApp para pedidos.
+   - Definir qué se responde cuando falta stock, pago no llega o envíos demorados.
+
+Resumen de prioridades
+   - Fase 1 = más difícil y prioritaria: pago directo + políticas.
+   - Fase 2 = envío/confimación = necesario para cerrar la operación.
+   - Fase 3 = transporte/guía = profesionaliza la entrega.
+   - Fase 4 = pulido y crecimiento.
+
+Notas finales
+   - Hacer los cambios paso a paso.
+   - No reemplazar el flujo WhatsApp hasta que el pago directo funcione sin romper el sitio.
+   - Mantener todo documentado en texto simple dentro del proyecto.
