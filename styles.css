@@ -2769,6 +2769,56 @@ a:focus-visible {
   gap: 0.85rem;
 }
 
+/* Responsive adjustments for price buttons on small screens */
+@media (max-width: 600px) {
+  .price-selector {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .price-option {
+    min-height: 2.6rem;
+    padding: 0 0.6rem;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    white-space: normal;
+    line-height: 1.15;
+  }
+
+  .modal-content--inspiracion .button--ghost,
+  .modal-content--inspiracion .button--primary {
+    min-height: 3rem;
+    font-size: 0.95rem;
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .price-selector {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.45rem;
+  }
+
+  .price-option {
+    min-height: 2.4rem;
+    padding: 0 0.5rem;
+    font-size: 0.92rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .price-selector {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .price-option {
+    min-height: 2.2rem;
+    padding: 0 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
 /* Frasco gallery */
 .frasco-gallery {
   display: grid;
