@@ -2259,10 +2259,61 @@ a:focus-visible {
   }
 
   .variant-button {
-    width: 100%;
     min-height: 42px;
     padding: 0.65rem 0.85rem;
     font-size: 0.95rem;
+    width: auto;
+    max-width: 180px;
+  }
+}
+
+.variant-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-start;
+}
+
+@media (max-width: 700px) {
+  .button {
+    padding: 0.65rem 0.9rem;
+    min-height: 40px;
+    font-size: 0.9rem;
+    border-radius: 16px;
+    max-width: 100%;
+  }
+
+  .button--large {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .product-card--catalog .product-cta,
+  .catalog-actions .button,
+  .payment-gateway-actions .button,
+  .checkout-modal__actions .button,
+  .cart-footer .button,
+  .faq-actions .button {
+    min-width: auto;
+    width: auto;
+  }
+
+  .detail-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .detail-actions .button {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .button,
+  .button--primary,
+  .button--ghost,
+  .product-cta,
+  .variant-button {
+    max-width: 100%;
   }
 }
 
