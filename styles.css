@@ -2210,7 +2210,54 @@ a:focus-visible {
   color: var(--zayro-black);
 }
 
+@media (max-width: 900px) {
+  .button {
+    padding: 0.85rem 1.1rem;
+    min-height: 48px;
+    font-size: 0.95rem;
+  }
+
+  .button--large {
+    padding: 0.95rem 2rem;
+    font-size: 1rem;
+  }
+
+  .product-card--catalog .product-cta {
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .catalog-actions .button {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .detail-actions {
+    width: 100%;
+  }
+}
+
 @media (max-width: 700px) {
+  .button {
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+    font-size: 0.92rem;
+  }
+
+  .button--large {
+    padding: 0.85rem 1.6rem;
+    font-size: 0.98rem;
+  }
+
+  .product-card--catalog .product-cta {
+    padding: 0.75rem 0.95rem;
+    font-size: 0.9rem;
+  }
+
+  .detail-actions {
+    gap: 0.7rem;
+  }
+
   .variant-button {
     width: 100%;
     min-height: 42px;
