@@ -474,6 +474,7 @@ a:focus-visible {
   min-height: inherit;
   height: auto;
   overflow: hidden;
+  touch-action: pan-y;
 }
 
 .carousel__slides {
@@ -1362,17 +1363,18 @@ a:focus-visible {
   transform: translateY(0) scale(1);
 }
 
-/* Center catalog note and make it responsive */
+/* Align catalog note with other content */
 .catalog-note {
-  max-width: var(--container);
-  margin: 0 auto;
-  text-align: center;
+  width: var(--container);
+  margin: 0 auto 0;
+  text-align: left;
   font-size: 1rem;
   color: var(--zayro-black);
 }
 
 @media (max-width: 760px) {
   .catalog-note {
+    width: auto;
     padding: 0 1rem;
     font-size: 0.95rem;
   }
@@ -1993,7 +1995,7 @@ a:focus-visible {
 .detail-info {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.25rem;
 }
 
 .detail-brand {
@@ -2029,7 +2031,12 @@ a:focus-visible {
 .detail-status {
   font-size: 0.85rem;
   color: var(--zayro-mist);
-  margin: 0;
+  margin: 0 0 0.05rem;
+}
+
+.detail-status:empty,
+.detail-hint:empty {
+  display: none;
 }
 
 .detail-section-title {
@@ -2038,14 +2045,14 @@ a:focus-visible {
   color: var(--zayro-accent);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.15rem;
 }
 
 .detail-section p {
   margin: 0;
   color: var(--zayro-mist);
   line-height: 1.6;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .presentation-options {

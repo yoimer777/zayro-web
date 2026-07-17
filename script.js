@@ -1622,13 +1622,40 @@ function initCarousel() {
   wrap?.addEventListener('mouseenter', stopAutoplay);
   wrap?.addEventListener('mouseleave', startAutoplay);
 
-  carousel?.addEventListener('touchstart', (e) => {
-    const startX = e.touches[0].clientX;
-    carousel.addEventListener('touchend', (e2) => {
-      const endX = e2.changedTouches[0].clientX;
-      if (startX - endX > 50) nextSlide();
-      if (endX - startX > 50) prevSlide();
-    }, { once: true });
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchMoved = false;
+
+  carousel.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    touchMoved = false;
+  }, { passive: true });
+
+  carousel.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    const deltaX = Math.abs(touch.clientX - touchStartX);
+    const deltaY = Math.abs(touch.clientY - touchStartY);
+    if (deltaX > 10 && deltaX > deltaY) {
+      touchMoved = true;
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  carousel.addEventListener('touchend', (e) => {
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartX;
+    if (!touchMoved) return;
+    if (deltaX < -50) {
+      stopAutoplay();
+      nextSlide();
+      startAutoplay();
+    } else if (deltaX > 50) {
+      stopAutoplay();
+      prevSlide();
+      startAutoplay();
+    }
   });
 
   showSlide(0);
